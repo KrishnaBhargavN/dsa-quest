@@ -162,3 +162,29 @@ func TestURLKey(t *testing.T) {
 		}
 	}
 }
+
+func TestNeedsRedo(t *testing.T) {
+	cases := []struct {
+		outcome, difficulty string
+		took                time.Duration
+		want                bool
+	}{
+		{Stuck, Easy, time.Minute, true},
+		{Solved, Medium, 41 * time.Minute, true},
+		{Solved, Medium, 40 * time.Minute, false},
+		{Solved, Hard, 90 * time.Minute, false},
+	}
+	for _, c := range cases {
+		if got := NeedsRedo(c.outcome, c.difficulty, c.took); got != c.want {
+			t.Errorf("NeedsRedo(%s, %s, %v) = %v, want %v", c.outcome, c.difficulty, c.took, got, c.want)
+		}
+	}
+}
+
+func TestRevisionDueUsesGameDay(t *testing.T) {
+	// 1 AM IST Tuesday is still Monday's game day, so +7 lands on next Monday.
+	now := time.Date(2026, 10, 20, 1, 0, 0, 0, IST)
+	if got := RevisionDue(now, 7).Format("2006-01-02"); got != "2026-10-26" {
+		t.Errorf("RevisionDue = %s, want 2026-10-26", got)
+	}
+}

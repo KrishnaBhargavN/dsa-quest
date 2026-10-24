@@ -212,3 +212,18 @@ func URLKey(raw string) string {
 	}
 	return strings.TrimRight(u, "/")
 }
+
+// SlowMediumLimit is how long a solved medium can take before it goes on the
+// redo list.
+const SlowMediumLimit = 40 * time.Minute
+
+// NeedsRedo reports whether a problem whose latest finished attempt had this
+// outcome, difficulty and duration belongs on the redo list.
+func NeedsRedo(outcome, difficulty string, took time.Duration) bool {
+	return outcome == Stuck || (outcome == Solved && difficulty == Medium && took > SlowMediumLimit)
+}
+
+// RevisionDue returns the game day a revision scheduled now falls on, inDays later.
+func RevisionDue(now time.Time, inDays int) time.Time {
+	return Day(now).AddDate(0, 0, inDays)
+}

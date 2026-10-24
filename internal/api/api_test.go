@@ -64,7 +64,7 @@ func setup(t *testing.T) (*client, *time.Time, *httptest.Server) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, err := raw.Exec(`DROP TABLE IF EXISTS ledger, milestones, rewards, attempts, settings CASCADE`); err != nil {
+	if _, err := raw.Exec(`DROP TABLE IF EXISTS revisions, problems, ledger, milestones, rewards, attempts, settings CASCADE`); err != nil {
 		t.Fatal(err)
 	}
 	raw.Close()

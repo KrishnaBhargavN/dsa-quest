@@ -60,3 +60,41 @@ WHERE NOT EXISTS (SELECT 1 FROM rewards);
 INSERT INTO milestones (name, good_weeks_needed)
 SELECT * FROM (VALUES ('Steam game', 3), ('Gaming mouse', 6)) AS seed (name, good_weeks_needed)
 WHERE NOT EXISTS (SELECT 1 FROM milestones);
+
+-- Problem list. Seeded rows are upserted from problems.json on every cold
+-- start (see seedProblems). Progress lives in attempts (matched by url_key)
+-- and done_before_at, which the seed never touches.
+CREATE TABLE IF NOT EXISTS problems (
+  id              TEXT PRIMARY KEY,
+  ord             DOUBLE PRECISION NOT NULL,
+  phase           INT,
+  topic           TEXT NOT NULL DEFAULT '',
+  title           TEXT NOT NULL,
+  url             TEXT NOT NULL DEFAULT '',
+  url_key         TEXT,
+  difficulty      TEXT NOT NULL CHECK (difficulty IN ('easy', 'medium', 'hard')),
+  note            TEXT NOT NULL DEFAULT '',
+  description     TEXT NOT NULL DEFAULT '',
+  hints           TEXT[] NOT NULL DEFAULT '{}',
+  blind           BOOLEAN NOT NULL DEFAULT false,
+  custom          BOOLEAN NOT NULL DEFAULT false,
+  done_before_at  TIMESTAMPTZ,
+  active          BOOLEAN NOT NULL DEFAULT true
+);
+CREATE UNIQUE INDEX IF NOT EXISTS problems_url_key_idx ON problems (url_key) WHERE url_key IS NOT NULL AND active;
+
+ALTER TABLE attempts ADD COLUMN IF NOT EXISTS url_key TEXT;
+CREATE INDEX IF NOT EXISTS attempts_url_key_idx ON attempts (url_key);
+
+-- Revision calendar: "solve this again on <due>".
+CREATE TABLE IF NOT EXISTS revisions (
+  id          BIGSERIAL PRIMARY KEY,
+  url         TEXT NOT NULL DEFAULT '',
+  url_key     TEXT,
+  title       TEXT NOT NULL,
+  difficulty  TEXT NOT NULL CHECK (difficulty IN ('easy', 'medium', 'hard')),
+  due         DATE NOT NULL,
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+  done_at     TIMESTAMPTZ
+);
+CREATE INDEX IF NOT EXISTS revisions_due_idx ON revisions (due) WHERE done_at IS NULL;

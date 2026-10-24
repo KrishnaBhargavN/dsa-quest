@@ -96,6 +96,12 @@ func (s *Store) Ensure(ctx context.Context) error {
 		if _, err := tx.ExecContext(ctx, schemaSQL); err != nil {
 			return fmt.Errorf("create schema: %w", err)
 		}
+		if err := seedProblems(ctx, tx); err != nil {
+			return fmt.Errorf("seed problems: %w", err)
+		}
+		if err := backfillURLKeys(ctx, tx); err != nil {
+			return fmt.Errorf("backfill url keys: %w", err)
+		}
 		buf := make([]byte, 32)
 		if _, err := rand.Read(buf); err != nil {
 			return err
@@ -159,6 +165,7 @@ type Attempt struct {
 	Outcome    string     `json:"outcome"`
 	Minutes    *float64   `json:"minutes"`
 	Points     int        `json:"points"`
+	urlKey     string
 }
 
 type Result struct {
@@ -212,6 +219,11 @@ type Summary struct {
 	Milestones  []Milestone `json:"milestones"`
 	NextReward  *NextReward `json:"nextReward"`
 	Running     *Attempt    `json:"running"`
+	// RunningProblem is the list problem the running timer is for, if any,
+	// so the timer screen can show its description and hints.
+	RunningProblem *Problem   `json:"runningProblem"`
+	NextUp         *Problem   `json:"nextUp"`
+	RevisionsDue   []Revision `json:"revisionsDue"`
 }
 
 type Redemption struct {
@@ -316,6 +328,22 @@ func (s *Store) Summary(ctx context.Context, now time.Time) (*Summary, error) {
 	if sum.Running, err = runningAttempt(ctx, s.db); err != nil {
 		return nil, err
 	}
+	list, err := loadProblems(ctx, s.db)
+	if err != nil {
+		return nil, err
+	}
+	sum.NextUp = nextUp(list)
+	if sum.Running != nil && sum.Running.urlKey != "" {
+		for i := range list.Problems {
+			if list.Problems[i].urlKey == sum.Running.urlKey {
+				sum.RunningProblem = &list.Problems[i]
+				break
+			}
+		}
+	}
+	if sum.RevisionsDue, err = dueRevisions(ctx, s.db, today); err != nil {
+		return nil, err
+	}
 	return sum, nil
 }
 
@@ -340,12 +368,12 @@ func milestones(ctx context.Context, q queryer, goodWeeks int) ([]Milestone, err
 
 const attemptCols = `a.id, a.kind, COALESCE(a.url, ''), COALESCE(a.title, ''), COALESCE(a.difficulty, ''),
 	a.started_at, a.ended_at, COALESCE(a.outcome, ''),
-	COALESCE((SELECT SUM(l.delta) FROM ledger l WHERE l.attempt_id = a.id), 0)`
+	COALESCE((SELECT SUM(l.delta) FROM ledger l WHERE l.attempt_id = a.id), 0), COALESCE(a.url_key, '')`
 
 func scanAttempt(sc interface{ Scan(...any) error }) (*Attempt, error) {
 	var a Attempt
 	if err := sc.Scan(&a.ID, &a.Kind, &a.URL, &a.Title, &a.Difficulty,
-		&a.StartedAt, &a.EndedAt, &a.Outcome, &a.Points); err != nil {
+		&a.StartedAt, &a.EndedAt, &a.Outcome, &a.Points, &a.urlKey); err != nil {
 		return nil, err
 	}
 	if a.EndedAt != nil && a.Kind == "problem" {
@@ -520,12 +548,18 @@ func finishResult(ctx context.Context, tx *sql.Tx, attemptID int64, awards []gam
 	return r, nil
 }
 
-func (s *Store) StartAttempt(ctx context.Context, url, title, difficulty string, now time.Time) (*Attempt, error) {
-	if !game.ValidDifficulty(difficulty) {
+// StartAttempt starts the timer. With a problemID, the link, title and
+// difficulty come from the list; otherwise from the arguments.
+func (s *Store) StartAttempt(ctx context.Context, problemID, url, title, difficulty string, now time.Time) (*Attempt, error) {
+	if problemID == "" && !game.ValidDifficulty(difficulty) {
 		return nil, ErrBadInput
 	}
 	var out *Attempt
 	err := s.write(ctx, func(tx *sql.Tx) error {
+		ref, err := resolveRef(ctx, tx, problemID, url, title, difficulty)
+		if err != nil {
+			return err
+		}
 		running, err := runningAttempt(ctx, tx)
 		if err != nil {
 			return err
@@ -535,8 +569,9 @@ func (s *Store) StartAttempt(ctx context.Context, url, title, difficulty string,
 		}
 		var id int64
 		if err := tx.QueryRowContext(ctx,
-			`INSERT INTO attempts (kind, url, title, difficulty, started_at) VALUES ('problem', NULLIF($1, ''), NULLIF($2, ''), $3, $4) RETURNING id`,
-			url, title, difficulty, now).Scan(&id); err != nil {
+			`INSERT INTO attempts (kind, url, title, difficulty, started_at, url_key)
+			 VALUES ('problem', NULLIF($1, ''), NULLIF($2, ''), $3, $4, NULLIF($5, '')) RETURNING id`,
+			ref.url, ref.title, ref.difficulty, now, ref.urlKey).Scan(&id); err != nil {
 			return err
 		}
 		out, err = scanAttempt(tx.QueryRowContext(ctx, `SELECT `+attemptCols+` FROM attempts a WHERE a.id = $1`, id))
@@ -551,12 +586,12 @@ func (s *Store) FinishAttempt(ctx context.Context, id int64, outcome string, now
 	}
 	var out *Result
 	err := s.write(ctx, func(tx *sql.Tx) error {
-		var difficulty string
+		var difficulty, urlKey string
 		var started time.Time
 		var ended *time.Time
 		err := tx.QueryRowContext(ctx,
-			`SELECT difficulty, started_at, ended_at FROM attempts WHERE id = $1 AND kind = 'problem'`, id).
-			Scan(&difficulty, &started, &ended)
+			`SELECT difficulty, started_at, ended_at, COALESCE(url_key, '') FROM attempts WHERE id = $1 AND kind = 'problem'`, id).
+			Scan(&difficulty, &started, &ended, &urlKey)
 		if errors.Is(err, sql.ErrNoRows) {
 			return ErrNotFound
 		}
@@ -570,6 +605,9 @@ func (s *Store) FinishAttempt(ctx context.Context, id int64, outcome string, now
 			`UPDATE attempts SET ended_at = $1, outcome = $2 WHERE id = $3`, now, outcome, id); err != nil {
 			return err
 		}
+		if err := completeRevisions(ctx, tx, urlKey, now, now); err != nil {
+			return err
+		}
 		awards := game.ProblemAwards(difficulty, outcome, now.Sub(started))
 		out, err = finishResult(ctx, tx, id, awards, started, now)
 		return err
@@ -578,8 +616,8 @@ func (s *Store) FinishAttempt(ctx context.Context, id int64, outcome string, now
 }
 
 // LogAttempt records a problem solved without the timer: you say how long it took.
-func (s *Store) LogAttempt(ctx context.Context, url, title, difficulty, outcome string, minutes, daysAgo int, now time.Time) (*Result, error) {
-	if !game.ValidDifficulty(difficulty) || (outcome != game.Solved && outcome != game.Stuck) ||
+func (s *Store) LogAttempt(ctx context.Context, problemID, url, title, difficulty, outcome string, minutes, daysAgo int, now time.Time) (*Result, error) {
+	if (problemID == "" && !game.ValidDifficulty(difficulty)) || (outcome != game.Solved && outcome != game.Stuck) ||
 		minutes < 1 || minutes > 600 || daysAgo < 0 || daysAgo > 1 {
 		return nil, ErrBadInput
 	}
@@ -587,15 +625,21 @@ func (s *Store) LogAttempt(ctx context.Context, url, title, difficulty, outcome 
 	started := ended.Add(-time.Duration(minutes) * time.Minute)
 	var out *Result
 	err := s.write(ctx, func(tx *sql.Tx) error {
-		var id int64
-		if err := tx.QueryRowContext(ctx,
-			`INSERT INTO attempts (kind, url, title, difficulty, started_at, ended_at, outcome)
-			 VALUES ('problem', NULLIF($1, ''), NULLIF($2, ''), $3, $4, $5, $6) RETURNING id`,
-			url, title, difficulty, started, ended, outcome).Scan(&id); err != nil {
+		ref, err := resolveRef(ctx, tx, problemID, url, title, difficulty)
+		if err != nil {
 			return err
 		}
-		awards := game.ProblemAwards(difficulty, outcome, ended.Sub(started))
-		var err error
+		var id int64
+		if err := tx.QueryRowContext(ctx,
+			`INSERT INTO attempts (kind, url, title, difficulty, started_at, ended_at, outcome, url_key)
+			 VALUES ('problem', NULLIF($1, ''), NULLIF($2, ''), $3, $4, $5, $6, NULLIF($7, '')) RETURNING id`,
+			ref.url, ref.title, ref.difficulty, started, ended, outcome, ref.urlKey).Scan(&id); err != nil {
+			return err
+		}
+		if err := completeRevisions(ctx, tx, ref.urlKey, ended, now); err != nil {
+			return err
+		}
+		awards := game.ProblemAwards(ref.difficulty, outcome, ended.Sub(started))
 		out, err = finishResult(ctx, tx, id, awards, started, now)
 		return err
 	})

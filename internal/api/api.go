@@ -53,6 +53,17 @@ func (s *Server) Handler() http.Handler {
 	api.HandleFunc("POST /api/rewards/{id}/buy", s.authed(s.buy))
 	api.HandleFunc("POST /api/mystery", s.authed(s.mystery))
 	api.HandleFunc("POST /api/milestones/{id}/claim", s.authed(s.claimMilestone))
+	api.HandleFunc("GET /api/problems", s.authed(s.problems))
+	api.HandleFunc("POST /api/problems", s.authed(s.createProblem))
+	api.HandleFunc("PUT /api/problems/{id}", s.authed(s.updateProblem))
+	api.HandleFunc("DELETE /api/problems/{id}", s.authed(s.removeProblem))
+	api.HandleFunc("POST /api/problems/{id}/before", s.authed(s.doneBefore(true)))
+	api.HandleFunc("DELETE /api/problems/{id}/before", s.authed(s.doneBefore(false)))
+	api.HandleFunc("GET /api/revisions", s.authed(s.revisions))
+	api.HandleFunc("POST /api/revisions", s.authed(s.scheduleRevision))
+	api.HandleFunc("PUT /api/revisions/{id}", s.authed(s.moveRevision))
+	api.HandleFunc("POST /api/revisions/{id}/done", s.authed(s.completeRevision))
+	api.HandleFunc("DELETE /api/revisions/{id}", s.authed(s.deleteRevision))
 	api.HandleFunc("/api/", func(w http.ResponseWriter, r *http.Request) {
 		writeErr(w, http.StatusNotFound, "no such endpoint")
 	})
@@ -134,7 +145,7 @@ func (s *Server) fail(w http.ResponseWriter, err error) {
 	case errors.Is(err, store.ErrTimerRunning), errors.Is(err, store.ErrFinished),
 		errors.Is(err, store.ErrNotEnough), errors.Is(err, store.ErrLocked),
 		errors.Is(err, store.ErrClaimed), errors.Is(err, store.ErrEmptyMystery),
-		errors.Is(err, store.ErrNotForSale):
+		errors.Is(err, store.ErrNotForSale), errors.Is(err, store.ErrDuplicate):
 		writeErr(w, http.StatusConflict, err.Error())
 	default:
 		log.Printf("error: %v", err)
@@ -195,6 +206,7 @@ func (s *Server) summary(w http.ResponseWriter, r *http.Request) {
 }
 
 type problemBody struct {
+	ProblemID  string `json:"problemId"`
 	URL        string `json:"url"`
 	Title      string `json:"title"`
 	Difficulty string `json:"difficulty"`
@@ -243,7 +255,7 @@ func (s *Server) startAttempt(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	b.clean()
-	a, err := s.store.StartAttempt(r.Context(), b.URL, b.Title, b.Difficulty, s.now())
+	a, err := s.store.StartAttempt(r.Context(), b.ProblemID, b.URL, b.Title, b.Difficulty, s.now())
 	if err != nil {
 		s.fail(w, err)
 		return
@@ -258,7 +270,7 @@ func (s *Server) logAttempt(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	b.clean()
-	res, err := s.store.LogAttempt(r.Context(), b.URL, b.Title, b.Difficulty, b.Outcome, b.Minutes, b.DaysAgo, s.now())
+	res, err := s.store.LogAttempt(r.Context(), b.ProblemID, b.URL, b.Title, b.Difficulty, b.Outcome, b.Minutes, b.DaysAgo, s.now())
 	if err != nil {
 		s.fail(w, err)
 		return

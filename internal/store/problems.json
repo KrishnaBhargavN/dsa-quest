@@ -1,0 +1,2720 @@
+[
+ {
+  "order": 1,
+  "id": "lc-1462",
+  "phase": 1,
+  "topic": "Graphs",
+  "source": "leetcode",
+  "number": 1462,
+  "title": "Course Schedule IV",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/course-schedule-iv/",
+  "blind": false,
+  "note": "open queue",
+  "description": "Given n courses and direct prerequisite pairs, answer queries asking whether course u is a prerequisite (directly or indirectly) of course v.",
+  "hints": [
+   "n is at most 100, so you can afford to precompute the full \"can reach\" relation for every pair of courses.",
+   "Transitive closure: Floyd-Warshall style reach[i][j] = reach[i][j] or (reach[i][k] and reach[k][j]), or propagate ancestor sets along a topological order."
+  ]
+ },
+ {
+  "order": 2,
+  "id": "lc-827",
+  "phase": 1,
+  "topic": "Graphs",
+  "source": "leetcode",
+  "number": 827,
+  "title": "Making A Large Island",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/making-a-large-island/",
+  "blind": false,
+  "note": "open queue",
+  "description": "In an n x n grid of 0s and 1s you may flip at most one 0 to 1. Return the size of the largest island you can end up with.",
+  "hints": [
+   "Label every existing island once and record its size, instead of re-running a flood fill for each 0.",
+   "For each 0, add up the sizes of the distinct island ids among its 4 neighbours, plus 1. Remember the grid that is already all 1s."
+  ]
+ },
+ {
+  "order": 3,
+  "id": "lc-1584",
+  "phase": 1,
+  "topic": "Graphs",
+  "source": "leetcode",
+  "number": 1584,
+  "title": "Min Cost to Connect All Points",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/min-cost-to-connect-all-points/",
+  "blind": false,
+  "note": "open queue",
+  "description": "Connect all points on a plane with minimum total Manhattan distance, where any two points can be joined directly.",
+  "hints": [
+   "This is a minimum spanning tree on a complete graph with up to 1000 nodes.",
+   "Prim's with a plain O(n^2) array of best distances (no heap, no edge list) beats building all n^2 edges for Kruskal."
+  ]
+ },
+ {
+  "order": 4,
+  "id": "lc-300",
+  "phase": 1,
+  "topic": "DP - linear",
+  "source": "leetcode",
+  "number": 300,
+  "title": "Longest Increasing Subsequence",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/longest-increasing-subsequence/",
+  "blind": false,
+  "note": "redo cold in O(n log n)",
+  "description": "Return the length of the longest strictly increasing subsequence of an integer array.",
+  "hints": [
+   "The O(n^2) DP is dp[i] = 1 + max dp[j] over j < i with nums[j] < nums[i]. Now aim lower.",
+   "Keep tails[k] = the smallest possible tail of an increasing subsequence of length k+1, and binary search (lower bound) each number into it."
+  ]
+ },
+ {
+  "order": 5,
+  "id": "lc-213",
+  "phase": 1,
+  "topic": "DP - linear",
+  "source": "leetcode",
+  "number": 213,
+  "title": "House Robber II",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/house-robber-ii/",
+  "blind": false,
+  "note": "",
+  "description": "Houses in a circle hold money and you can't rob two adjacent ones. Maximise the amount robbed.",
+  "hints": [
+   "The circle adds exactly one constraint: the first and last house can't both be taken.",
+   "Run linear House Robber twice, on houses [0..n-2] and [1..n-1], and take the max. Handle n = 1 separately."
+  ]
+ },
+ {
+  "order": 6,
+  "id": "lc-740",
+  "phase": 1,
+  "topic": "DP - linear",
+  "source": "leetcode",
+  "number": 740,
+  "title": "Delete and Earn",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/delete-and-earn/",
+  "blind": false,
+  "note": "",
+  "description": "Taking a value x earns x points but deletes every x-1 and x+1. Maximise your total.",
+  "hints": [
+   "If you take one copy of x you may as well take all of them. Group by value.",
+   "Build total[v] = v * count(v); now it's House Robber over the values 0..max."
+  ]
+ },
+ {
+  "order": 7,
+  "id": "lc-91",
+  "phase": 1,
+  "topic": "DP - linear",
+  "source": "leetcode",
+  "number": 91,
+  "title": "Decode Ways",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/decode-ways/",
+  "blind": false,
+  "note": "",
+  "description": "Digits map to letters (1 is A, 26 is Z). Count the ways a digit string can be decoded.",
+  "hints": [
+   "At each position you can consume one digit or two. Zeros are where it goes wrong.",
+   "dp[i] = (s[i-1] != '0' ? dp[i-1] : 0) + (two-digit value in 10..26 ? dp[i-2] : 0). Two variables are enough."
+  ]
+ },
+ {
+  "order": 8,
+  "id": "lc-139",
+  "phase": 1,
+  "topic": "DP - linear",
+  "source": "leetcode",
+  "number": 139,
+  "title": "Word Break",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/word-break/",
+  "blind": false,
+  "note": "",
+  "description": "Decide whether a string can be split into a sequence of dictionary words.",
+  "hints": [
+   "State: can the prefix of length i be segmented?",
+   "dp[i] is true if some j < i has dp[j] true and s[j..i) is in a HashSet. Only look back as far as the longest word."
+  ]
+ },
+ {
+  "order": 9,
+  "id": "lc-152",
+  "phase": 1,
+  "topic": "DP - linear",
+  "source": "leetcode",
+  "number": 152,
+  "title": "Maximum Product Subarray",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/maximum-product-subarray/",
+  "blind": false,
+  "note": "",
+  "description": "Find the contiguous subarray with the largest product.",
+  "hints": [
+   "A negative number can turn the smallest product so far into the largest.",
+   "Track both the max and the min product ending at i; when nums[i] is negative, swap them before updating."
+  ]
+ },
+ {
+  "order": 10,
+  "id": "lc-45",
+  "phase": 1,
+  "topic": "DP - linear",
+  "source": "leetcode",
+  "number": 45,
+  "title": "Jump Game II",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/jump-game-ii/",
+  "blind": false,
+  "note": "greedy, not DP: diagnose first",
+  "description": "Each value is your maximum jump from that index. Return the minimum number of jumps to reach the last index.",
+  "hints": [
+   "Think in layers: every index reachable with k jumps forms one contiguous range.",
+   "Walk i and track the farthest reach; when i reaches the end of the current layer, add a jump and set the layer end to farthest."
+  ]
+ },
+ {
+  "order": 11,
+  "id": "lc-62",
+  "phase": 1,
+  "topic": "DP - grid",
+  "source": "leetcode",
+  "number": 62,
+  "title": "Unique Paths",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/unique-paths/",
+  "blind": false,
+  "note": "",
+  "description": "Count the paths from the top-left to the bottom-right of an m x n grid moving only right or down.",
+  "hints": [
+   "Paths into a cell come only from above or from the left.",
+   "One 1D array: dp[j] += dp[j-1], row by row. (Or the closed form C(m+n-2, m-1).)"
+  ]
+ },
+ {
+  "order": 12,
+  "id": "lc-63",
+  "phase": 1,
+  "topic": "DP - grid",
+  "source": "leetcode",
+  "number": 63,
+  "title": "Unique Paths II",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/unique-paths-ii/",
+  "blind": false,
+  "note": "",
+  "description": "Same as Unique Paths, but some cells are blocked.",
+  "hints": [
+   "A blocked cell contributes 0 ways, including in the first row and column.",
+   "The same 1D DP with dp[j] = 0 on obstacles. Check for an obstacle on the start cell."
+  ]
+ },
+ {
+  "order": 13,
+  "id": "lc-64",
+  "phase": 1,
+  "topic": "DP - grid",
+  "source": "leetcode",
+  "number": 64,
+  "title": "Minimum Path Sum",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/minimum-path-sum/",
+  "blind": false,
+  "note": "",
+  "description": "Find the minimum-sum path from the top-left to the bottom-right moving right or down.",
+  "hints": [
+   "A cell's best cost depends only on the best costs above it and to its left.",
+   "dp[i][j] = grid[i][j] + min(up, left), with the first row and column as running sums. Can be done in place."
+  ]
+ },
+ {
+  "order": 14,
+  "id": "lc-120",
+  "phase": 1,
+  "topic": "DP - grid",
+  "source": "leetcode",
+  "number": 120,
+  "title": "Triangle",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/triangle/",
+  "blind": false,
+  "note": "",
+  "description": "Find the minimum path sum from the top of a triangle to the bottom, moving to one of the two adjacent numbers on the next row.",
+  "hints": [
+   "Top-down needs care at the edges of each row. Try the other direction.",
+   "Bottom-up: dp[j] = row[j] + min(dp[j], dp[j+1]); the answer is dp[0]. O(n) extra space."
+  ]
+ },
+ {
+  "order": 15,
+  "id": "lc-931",
+  "phase": 1,
+  "topic": "DP - grid",
+  "source": "leetcode",
+  "number": 931,
+  "title": "Minimum Falling Path Sum",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/minimum-falling-path-sum/",
+  "blind": false,
+  "note": "",
+  "description": "A falling path takes one element per row of a square matrix, moving straight down or diagonally. Minimise its sum.",
+  "hints": [
+   "Each cell can be reached from at most three cells in the row above.",
+   "dp[r][c] = A[r][c] + min of dp[r-1][c-1..c+1] within bounds; the answer is the minimum of the last row."
+  ]
+ },
+ {
+  "order": 16,
+  "id": "lc-221",
+  "phase": 1,
+  "topic": "DP - grid",
+  "source": "leetcode",
+  "number": 221,
+  "title": "Maximal Square",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/maximal-square/",
+  "blind": false,
+  "note": "",
+  "description": "Find the area of the largest square containing only 1s in a binary matrix.",
+  "hints": [
+   "Let the state be the side of the largest all-1 square whose bottom-right corner is (i, j).",
+   "dp[i][j] = 1 + min(top, left, top-left) when the cell is '1'. Return the max side squared."
+  ]
+ },
+ {
+  "order": 17,
+  "id": "lc-174",
+  "phase": 1,
+  "topic": "DP - grid",
+  "source": "leetcode",
+  "number": 174,
+  "title": "Dungeon Game",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/dungeon-game/",
+  "blind": false,
+  "note": "",
+  "description": "A knight walks right or down through rooms that add or remove health, and health must stay above 0. Find the minimum starting health to reach the bottom-right.",
+  "hints": [
+   "Going forward you'd have to track two things (current health and the lowest it has been). Going backward you only need one.",
+   "From the bottom-right: need[i][j] = max(1, min(need[i+1][j], need[i][j+1]) - dungeon[i][j])."
+  ]
+ },
+ {
+  "order": 18,
+  "id": "lc-49",
+  "phase": 1,
+  "topic": "Arrays and hashing",
+  "source": "leetcode",
+  "number": 49,
+  "title": "Group Anagrams",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/group-anagrams/",
+  "blind": false,
+  "note": "",
+  "description": "Group strings that are anagrams of each other.",
+  "hints": [
+   "Anagrams share a canonical form. Use it as a map key.",
+   "Key = the sorted characters or a 26-count signature; HashMap<String, List<String>>."
+  ]
+ },
+ {
+  "order": 19,
+  "id": "lc-128",
+  "phase": 1,
+  "topic": "Arrays and hashing",
+  "source": "leetcode",
+  "number": 128,
+  "title": "Longest Consecutive Sequence",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/longest-consecutive-sequence/",
+  "blind": false,
+  "note": "",
+  "description": "Find the length of the longest run of consecutive integers in an unsorted array, in O(n).",
+  "hints": [
+   "Sorting is O(n log n). A set lets you ask \"is x-1 present?\" in O(1).",
+   "Only start counting at x when x-1 is not in the set, then walk x+1, x+2 and so on. Each number is touched a constant number of times."
+  ]
+ },
+ {
+  "order": 20,
+  "id": "lc-238",
+  "phase": 1,
+  "topic": "Arrays and hashing",
+  "source": "leetcode",
+  "number": 238,
+  "title": "Product of Array Except Self",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/product-of-array-except-self/",
+  "blind": false,
+  "note": "",
+  "description": "For each index return the product of every other element, without division, in O(n).",
+  "hints": [
+   "The answer at i is (product of everything left of i) times (product of everything right of i).",
+   "Fill the output with prefix products, then multiply in suffix products on a reverse pass using one running variable."
+  ]
+ },
+ {
+  "order": 21,
+  "id": "lc-560",
+  "phase": 1,
+  "topic": "Arrays and hashing",
+  "source": "leetcode",
+  "number": 560,
+  "title": "Subarray Sum Equals K",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/subarray-sum-equals-k/",
+  "blind": false,
+  "note": "",
+  "description": "Count the contiguous subarrays that sum to k. Values can be negative.",
+  "hints": [
+   "Negatives break sliding windows. Think prefix sums: sum(i..j) = P[j] - P[i-1].",
+   "HashMap of prefix sum to how often it was seen, seeded with {0: 1}; at each step add count[P - k]."
+  ]
+ },
+ {
+  "order": 22,
+  "id": "lc-15",
+  "phase": 1,
+  "topic": "Two pointers",
+  "source": "leetcode",
+  "number": 15,
+  "title": "3Sum",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/3sum/",
+  "blind": false,
+  "note": "",
+  "description": "Find all unique triplets that sum to zero.",
+  "hints": [
+   "Fix one element; then you need a pair with a known sum in the rest.",
+   "Sort; for each i run two pointers on (i+1, n-1). Skip duplicate values for i, and for both pointers after a match."
+  ]
+ },
+ {
+  "order": 23,
+  "id": "lc-11",
+  "phase": 1,
+  "topic": "Two pointers",
+  "source": "leetcode",
+  "number": 11,
+  "title": "Container With Most Water",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/container-with-most-water/",
+  "blind": false,
+  "note": "",
+  "description": "Pick two vertical lines that, with the x-axis, hold the most water.",
+  "hints": [
+   "The area is limited by the shorter line. Start with the widest container.",
+   "Two pointers from both ends; always move the shorter side inward, because moving the taller one can't increase the area."
+  ]
+ },
+ {
+  "order": 24,
+  "id": "lc-42",
+  "phase": 1,
+  "topic": "Two pointers",
+  "source": "leetcode",
+  "number": 42,
+  "title": "Trapping Rain Water",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/trapping-rain-water/",
+  "blind": false,
+  "note": "",
+  "description": "Given bar heights, compute how much rain water is trapped between them.",
+  "hints": [
+   "Water above bar i = min(highest bar to its left, highest to its right) - height[i].",
+   "Two pointers: the side with the smaller running max is already decided, so add its water and move it inward. O(1) space."
+  ]
+ },
+ {
+  "order": 25,
+  "id": "lc-3",
+  "phase": 1,
+  "topic": "Sliding window",
+  "source": "leetcode",
+  "number": 3,
+  "title": "Longest Substring Without Repeating Characters",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
+  "blind": false,
+  "note": "",
+  "description": "Find the length of the longest substring whose characters are all distinct.",
+  "hints": [
+   "Grow a window to the right and shrink from the left only when a repeat appears.",
+   "Store the last index of each character; on a repeat, left = max(left, last[c] + 1)."
+  ]
+ },
+ {
+  "order": 26,
+  "id": "lc-424",
+  "phase": 1,
+  "topic": "Sliding window",
+  "source": "leetcode",
+  "number": 424,
+  "title": "Longest Repeating Character Replacement",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/longest-repeating-character-replacement/",
+  "blind": false,
+  "note": "",
+  "description": "You may replace up to k characters. Return the length of the longest substring of one repeated letter you can make.",
+  "hints": [
+   "A window is valid when (window length - count of its most frequent letter) <= k.",
+   "Keep counts and a maxFreq that never needs to go down; when the window is invalid, slide left by one. The final window size is the answer."
+  ]
+ },
+ {
+  "order": 27,
+  "id": "lc-567",
+  "phase": 1,
+  "topic": "Sliding window",
+  "source": "leetcode",
+  "number": 567,
+  "title": "Permutation in String",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/permutation-in-string/",
+  "blind": false,
+  "note": "",
+  "description": "Decide whether s2 contains a permutation of s1 as a substring.",
+  "hints": [
+   "The window length is fixed at the length of s1.",
+   "Compare 26-count arrays for s1 and the window; slide by adding one character and removing one. A \"matches\" counter makes each check O(1)."
+  ]
+ },
+ {
+  "order": 28,
+  "id": "lc-1004",
+  "phase": 1,
+  "topic": "Sliding window",
+  "source": "leetcode",
+  "number": 1004,
+  "title": "Max Consecutive Ones III",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/max-consecutive-ones-iii/",
+  "blind": false,
+  "note": "",
+  "description": "Find the longest run of 1s if you may flip at most k zeros.",
+  "hints": [
+   "Rephrase: the longest window containing at most k zeros.",
+   "Variable window: count zeros and move left while the count exceeds k."
+  ]
+ },
+ {
+  "order": 29,
+  "id": "lc-76",
+  "phase": 1,
+  "topic": "Sliding window",
+  "source": "leetcode",
+  "number": 76,
+  "title": "Minimum Window Substring",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/minimum-window-substring/",
+  "blind": false,
+  "note": "",
+  "description": "Find the smallest substring of s that contains every character of t, counting duplicates.",
+  "hints": [
+   "Grow right until the window covers t, then shrink left as far as it stays valid.",
+   "need[] counts plus a \"missing\" counter; each time missing hits 0, record the window, then shrink."
+  ]
+ },
+ {
+  "order": 30,
+  "id": "lc-239",
+  "phase": 1,
+  "topic": "Sliding window",
+  "source": "leetcode",
+  "number": 239,
+  "title": "Sliding Window Maximum",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/sliding-window-maximum/",
+  "blind": false,
+  "note": "",
+  "description": "Return the maximum of every window of size k.",
+  "hints": [
+   "Once a larger element appears after x, x can never be a window maximum again.",
+   "A deque of indices with decreasing values: drop expired indices from the front and smaller values from the back."
+  ]
+ },
+ {
+  "order": 31,
+  "id": "lc-150",
+  "phase": 1,
+  "topic": "Stack and monotonic stack",
+  "source": "leetcode",
+  "number": 150,
+  "title": "Evaluate Reverse Polish Notation",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/evaluate-reverse-polish-notation/",
+  "blind": false,
+  "note": "",
+  "description": "Evaluate an expression in postfix notation with + - * / (division truncates).",
+  "hints": [
+   "Operands wait until their operator arrives.",
+   "Stack: push numbers; on an operator pop b, then a, and push a op b. The order matters for - and /."
+  ]
+ },
+ {
+  "order": 32,
+  "id": "lc-394",
+  "phase": 1,
+  "topic": "Stack and monotonic stack",
+  "source": "leetcode",
+  "number": 394,
+  "title": "Decode String",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/decode-string/",
+  "blind": false,
+  "note": "",
+  "description": "Expand encoded strings like 3[a2[c]] into accaccacc.",
+  "hints": [
+   "Nesting means you must remember the outer context while you build the inner string.",
+   "Two stacks (counts and StringBuilders): on '[' push and reset; on ']' pop and append the current string k times to the popped builder."
+  ]
+ },
+ {
+  "order": 33,
+  "id": "lc-739",
+  "phase": 1,
+  "topic": "Stack and monotonic stack",
+  "source": "leetcode",
+  "number": 739,
+  "title": "Daily Temperatures",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/daily-temperatures/",
+  "blind": false,
+  "note": "",
+  "description": "For each day, find how many days you wait until a warmer temperature.",
+  "hints": [
+   "Go left to right and keep the days that are still waiting for a warmer one.",
+   "A stack of indices with decreasing temperatures; when a warmer day arrives, pop and set answer[j] = i - j."
+  ]
+ },
+ {
+  "order": 34,
+  "id": "lc-853",
+  "phase": 1,
+  "topic": "Stack and monotonic stack",
+  "source": "leetcode",
+  "number": 853,
+  "title": "Car Fleet",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/car-fleet/",
+  "blind": false,
+  "note": "",
+  "description": "Cars drive toward a target at fixed speeds and can't overtake; a car that catches up joins that fleet. Count the fleets that arrive.",
+  "hints": [
+   "What matters is when each car would arrive on its own, and the order of positions.",
+   "Sort by position descending and compute time = (target - pos) / speed; a new fleet starts whenever a time exceeds the current fleet's time."
+  ]
+ },
+ {
+  "order": 35,
+  "id": "lc-402",
+  "phase": 1,
+  "topic": "Stack and monotonic stack",
+  "source": "leetcode",
+  "number": 402,
+  "title": "Remove K Digits",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/remove-k-digits/",
+  "blind": false,
+  "note": "",
+  "description": "Remove k digits from a number string to make it as small as possible.",
+  "hints": [
+   "Removing an earlier digit that is larger than the one after it always helps most.",
+   "Increasing stack: pop while the top > current and k > 0; trim from the end if k remains; strip leading zeros; return \"0\" if empty."
+  ]
+ },
+ {
+  "order": 36,
+  "id": "lc-907",
+  "phase": 1,
+  "topic": "Stack and monotonic stack",
+  "source": "leetcode",
+  "number": 907,
+  "title": "Sum of Subarray Minimums",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/sum-of-subarray-minimums/",
+  "blind": false,
+  "note": "",
+  "description": "Sum min(subarray) over every subarray, modulo 1e9+7.",
+  "hints": [
+   "Flip it: for each element, count how many subarrays it is the minimum of.",
+   "Previous-less and next-less-or-equal with monotonic stacks; contribution = arr[i] * left * right. Strict on one side only, to avoid double counting."
+  ]
+ },
+ {
+  "order": 37,
+  "id": "lc-84",
+  "phase": 1,
+  "topic": "Stack and monotonic stack",
+  "source": "leetcode",
+  "number": 84,
+  "title": "Largest Rectangle in Histogram",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/largest-rectangle-in-histogram/",
+  "blind": false,
+  "note": "",
+  "description": "Find the largest rectangle that fits inside a histogram.",
+  "hints": [
+   "For each bar, the widest rectangle of its height spans to the nearest shorter bar on each side.",
+   "Increasing stack of indices; when you pop height h at index i, its width is i - (new top) - 1. A trailing 0 flushes the stack."
+  ]
+ },
+ {
+  "order": 38,
+  "id": "lc-33",
+  "phase": 1,
+  "topic": "Binary search",
+  "source": "leetcode",
+  "number": 33,
+  "title": "Search in Rotated Sorted Array",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/search-in-rotated-sorted-array/",
+  "blind": false,
+  "note": "",
+  "description": "Find a target in a rotated sorted array of distinct values in O(log n).",
+  "hints": [
+   "At any mid, at least one half is properly sorted.",
+   "Find the sorted half; if the target lies inside its range go there, otherwise go to the other half."
+  ]
+ },
+ {
+  "order": 39,
+  "id": "lc-153",
+  "phase": 1,
+  "topic": "Binary search",
+  "source": "leetcode",
+  "number": 153,
+  "title": "Find Minimum in Rotated Sorted Array",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/",
+  "blind": false,
+  "note": "",
+  "description": "Find the minimum of a rotated sorted array of distinct values in O(log n).",
+  "hints": [
+   "Compare mid with the right end, not the left.",
+   "If nums[mid] > nums[hi] the minimum is right of mid (lo = mid + 1); otherwise hi = mid."
+  ]
+ },
+ {
+  "order": 40,
+  "id": "lc-981",
+  "phase": 1,
+  "topic": "Binary search",
+  "source": "leetcode",
+  "number": 981,
+  "title": "Time Based Key-Value Store",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/time-based-key-value-store/",
+  "blind": false,
+  "note": "",
+  "description": "Design set(key, value, timestamp) and get(key, timestamp), which returns the value with the largest timestamp not after the given one.",
+  "hints": [
+   "Timestamps for a key arrive in increasing order.",
+   "Map each key to a list of (timestamp, value) and binary search for the last timestamp <= the query (or use TreeMap.floorEntry)."
+  ]
+ },
+ {
+  "order": 41,
+  "id": "lc-875",
+  "phase": 1,
+  "topic": "Binary search",
+  "source": "leetcode",
+  "number": 875,
+  "title": "Koko Eating Bananas",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/koko-eating-bananas/",
+  "blind": false,
+  "note": "",
+  "description": "Find the minimum eating speed that finishes all piles within h hours, eating from one pile per hour.",
+  "hints": [
+   "If speed s works, every faster speed works too. That monotonic yes/no is the hook.",
+   "Binary search s in [1, max pile]; feasible when the sum of ceil(p / s) <= h. Sum in a long."
+  ]
+ },
+ {
+  "order": 42,
+  "id": "lc-1011",
+  "phase": 1,
+  "topic": "Binary search",
+  "source": "leetcode",
+  "number": 1011,
+  "title": "Capacity To Ship Packages Within D Days",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/",
+  "blind": false,
+  "note": "",
+  "description": "Find the smallest ship capacity that ships the packages, in order, within d days.",
+  "hints": [
+   "The same shape as Koko: a monotonic yes/no on the capacity.",
+   "Search capacity in [max weight, total weight]; greedily fill each day and count the days."
+  ]
+ },
+ {
+  "order": 43,
+  "id": "lc-1482",
+  "phase": 1,
+  "topic": "Binary search",
+  "source": "leetcode",
+  "number": 1482,
+  "title": "Minimum Number of Days to Make m Bouquets",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/",
+  "blind": false,
+  "note": "",
+  "description": "Flowers bloom on given days and a bouquet needs k adjacent bloomed flowers. Find the earliest day you can make m bouquets, or -1.",
+  "hints": [
+   "Ask \"can I make m bouquets by day D?\" and notice the answer only flips once as D grows.",
+   "Binary search D; count bouquets by scanning runs of bloomed flowers. Return -1 early if m * k > n (beware overflow)."
+  ]
+ },
+ {
+  "order": 44,
+  "id": "lc-410",
+  "phase": 1,
+  "topic": "Binary search",
+  "source": "leetcode",
+  "number": 410,
+  "title": "Split Array Largest Sum",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/split-array-largest-sum/",
+  "blind": false,
+  "note": "",
+  "description": "Split an array into k non-empty contiguous parts so the largest part sum is as small as possible.",
+  "hints": [
+   "Guess the answer instead of constructing the split.",
+   "Binary search the cap in [max, sum]; greedily count the parts needed under that cap; feasible if the count <= k."
+  ]
+ },
+ {
+  "order": 45,
+  "id": "lc-4",
+  "phase": 1,
+  "topic": "Binary search",
+  "source": "leetcode",
+  "number": 4,
+  "title": "Median of Two Sorted Arrays",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/median-of-two-sorted-arrays/",
+  "blind": false,
+  "note": "",
+  "description": "Find the median of two sorted arrays in O(log(m+n)).",
+  "hints": [
+   "Cut both arrays so the left sides together hold half the elements and every left value <= every right value.",
+   "Binary search the cut i in the shorter array, j = (m+n+1)/2 - i; check A[i-1] <= B[j] and B[j-1] <= A[i], using infinities at the edges."
+  ]
+ },
+ {
+  "order": 46,
+  "id": "lc-19",
+  "phase": 2,
+  "topic": "Linked list",
+  "source": "leetcode",
+  "number": 19,
+  "title": "Remove Nth Node From End of List",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/remove-nth-node-from-end-of-list/",
+  "blind": false,
+  "note": "",
+  "description": "Remove the n-th node from the end of a linked list in one pass.",
+  "hints": [
+   "Two pointers a fixed distance apart.",
+   "Dummy head; move fast n+1 steps, then move both until fast is null; slow.next = slow.next.next."
+  ]
+ },
+ {
+  "order": 47,
+  "id": "lc-143",
+  "phase": 2,
+  "topic": "Linked list",
+  "source": "leetcode",
+  "number": 143,
+  "title": "Reorder List",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/reorder-list/",
+  "blind": false,
+  "note": "",
+  "description": "Reorder L0, L1, ..., Ln into L0, Ln, L1, Ln-1, ... in place.",
+  "hints": [
+   "It's three classic list operations glued together.",
+   "Find the middle (slow/fast), reverse the second half, then merge the two halves alternately."
+  ]
+ },
+ {
+  "order": 48,
+  "id": "lc-138",
+  "phase": 2,
+  "topic": "Linked list",
+  "source": "leetcode",
+  "number": 138,
+  "title": "Copy List with Random Pointer",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/copy-list-with-random-pointer/",
+  "blind": false,
+  "note": "",
+  "description": "Deep-copy a linked list whose nodes also have a random pointer.",
+  "hints": [
+   "You need a way to get from an original node to its copy.",
+   "HashMap old to new in two passes; or interleave copies (A, A', B, B'), set randoms, then split the lists for O(1) space."
+  ]
+ },
+ {
+  "order": 49,
+  "id": "lc-287",
+  "phase": 2,
+  "topic": "Linked list",
+  "source": "leetcode",
+  "number": 287,
+  "title": "Find the Duplicate Number",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/find-the-duplicate-number/",
+  "blind": false,
+  "note": "",
+  "description": "An array holds n+1 values from 1..n with one value repeated. Find it without changing the array, in O(1) space.",
+  "hints": [
+   "Treat i -> nums[i] as a \"next\" pointer. What shape does a duplicate create?",
+   "Floyd's cycle detection: meet inside the cycle, restart one pointer at 0, and where they meet again is the duplicate."
+  ]
+ },
+ {
+  "order": 50,
+  "id": "lc-146",
+  "phase": 2,
+  "topic": "Linked list",
+  "source": "leetcode",
+  "number": 146,
+  "title": "LRU Cache",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/lru-cache/",
+  "blind": false,
+  "note": "",
+  "description": "Design a cache with O(1) get and put that evicts the least recently used key.",
+  "hints": [
+   "You need O(1) lookup plus O(1) \"move to front\" and \"remove oldest\".",
+   "HashMap key to node plus a doubly linked list with dummy head and tail. LinkedHashMap works, but write it yourself for interviews."
+  ]
+ },
+ {
+  "order": 51,
+  "id": "lc-25",
+  "phase": 2,
+  "topic": "Linked list",
+  "source": "leetcode",
+  "number": 25,
+  "title": "Reverse Nodes in k-Group",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/reverse-nodes-in-k-group/",
+  "blind": false,
+  "note": "",
+  "description": "Reverse a linked list k nodes at a time; a leftover tail shorter than k stays as it is.",
+  "hints": [
+   "Before reversing a group, check that k nodes exist.",
+   "Dummy head; per group find the k-th node, reverse the group in place, connect the previous group's tail to the new head, and move on."
+  ]
+ },
+ {
+  "order": 52,
+  "id": "lc-23",
+  "phase": 2,
+  "topic": "Linked list",
+  "source": "leetcode",
+  "number": 23,
+  "title": "Merge k Sorted Lists",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/merge-k-sorted-lists/",
+  "blind": false,
+  "note": "",
+  "description": "Merge k sorted linked lists into one sorted list.",
+  "hints": [
+   "At every step you need the smallest head among k lists.",
+   "A min-heap of list heads, O(N log k); or merge pairs divide-and-conquer style."
+  ]
+ },
+ {
+  "order": 53,
+  "id": "lc-102",
+  "phase": 2,
+  "topic": "Trees",
+  "source": "leetcode",
+  "number": 102,
+  "title": "Binary Tree Level Order Traversal",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/binary-tree-level-order-traversal/",
+  "blind": false,
+  "note": "",
+  "description": "Return the node values of a binary tree level by level.",
+  "hints": [
+   "A queue hands back nodes in the order they were discovered.",
+   "BFS; each round, read the queue size and pop exactly that many nodes into one level."
+  ]
+ },
+ {
+  "order": 54,
+  "id": "lc-199",
+  "phase": 2,
+  "topic": "Trees",
+  "source": "leetcode",
+  "number": 199,
+  "title": "Binary Tree Right Side View",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/binary-tree-right-side-view/",
+  "blind": false,
+  "note": "",
+  "description": "Return the values you'd see looking at a binary tree from the right.",
+  "hints": [
+   "You want exactly one node per depth: the last one at that depth.",
+   "BFS taking the last node of each level; or DFS right child first, adding a node when depth == result size."
+  ]
+ },
+ {
+  "order": 55,
+  "id": "lc-98",
+  "phase": 2,
+  "topic": "Trees",
+  "source": "leetcode",
+  "number": 98,
+  "title": "Validate Binary Search Tree",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/validate-binary-search-tree/",
+  "blind": false,
+  "note": "",
+  "description": "Check whether a binary tree is a valid BST with strict ordering.",
+  "hints": [
+   "Comparing a node only with its children isn't enough; each subtree must respect all its ancestors.",
+   "Recurse with (low, high) bounds as longs or nullable values; or check that inorder traversal is strictly increasing."
+  ]
+ },
+ {
+  "order": 56,
+  "id": "lc-230",
+  "phase": 2,
+  "topic": "Trees",
+  "source": "leetcode",
+  "number": 230,
+  "title": "Kth Smallest Element in a BST",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/kth-smallest-element-in-a-bst/",
+  "blind": false,
+  "note": "",
+  "description": "Return the k-th smallest value in a BST.",
+  "hints": [
+   "Which traversal visits a BST in sorted order?",
+   "Iterative inorder with a stack, stopping at the k-th pop. Keep the counter local, not in a field."
+  ]
+ },
+ {
+  "order": 57,
+  "id": "lc-1448",
+  "phase": 2,
+  "topic": "Trees",
+  "source": "leetcode",
+  "number": 1448,
+  "title": "Count Good Nodes in Binary Tree",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/count-good-nodes-in-binary-tree/",
+  "blind": false,
+  "note": "",
+  "description": "A node is good if no node on the path from the root to it has a greater value. Count the good nodes.",
+  "hints": [
+   "Each node only needs to know the largest value on its path from the root.",
+   "dfs(node, maxSoFar): count 1 if node.val >= maxSoFar, then recurse with max(maxSoFar, node.val)."
+  ]
+ },
+ {
+  "order": 58,
+  "id": "lc-105",
+  "phase": 2,
+  "topic": "Trees",
+  "source": "leetcode",
+  "number": 105,
+  "title": "Construct Binary Tree from Preorder and Inorder Traversal",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/",
+  "blind": false,
+  "note": "",
+  "description": "Rebuild a binary tree with unique values from its preorder and inorder traversals.",
+  "hints": [
+   "Preorder tells you the root; inorder tells you how many nodes go to its left.",
+   "HashMap value to inorder index; recurse on index ranges and consume preorder with a pointer. No array copies."
+  ]
+ },
+ {
+  "order": 59,
+  "id": "lc-236",
+  "phase": 2,
+  "topic": "Trees",
+  "source": "leetcode",
+  "number": 236,
+  "title": "Lowest Common Ancestor of a Binary Tree",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/",
+  "blind": false,
+  "note": "",
+  "description": "Find the lowest common ancestor of two nodes in a binary tree (not a BST).",
+  "hints": [
+   "Ask each subtree: did you find p or q?",
+   "Return the node if it is p, q or null; if both sides return non-null this node is the LCA, otherwise pass up the non-null side."
+  ]
+ },
+ {
+  "order": 60,
+  "id": "lc-437",
+  "phase": 2,
+  "topic": "Trees",
+  "source": "leetcode",
+  "number": 437,
+  "title": "Path Sum III",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/path-sum-iii/",
+  "blind": false,
+  "note": "",
+  "description": "Count the downward paths (starting and ending anywhere) whose values sum to a target.",
+  "hints": [
+   "It's Subarray Sum Equals K along every root-to-node path.",
+   "DFS with a prefix-sum HashMap: add count[cur - target], increment before recursing and decrement on the way back. Use long."
+  ]
+ },
+ {
+  "order": 61,
+  "id": "lc-863",
+  "phase": 2,
+  "topic": "Trees",
+  "source": "leetcode",
+  "number": 863,
+  "title": "All Nodes Distance K in Binary Tree",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/",
+  "blind": false,
+  "note": "",
+  "description": "Return every node exactly k edges away from a target node.",
+  "hints": [
+   "Distances also go upward, and the tree has no parent pointers.",
+   "Record parents (or build an adjacency list) with a DFS, then BFS from the target for k levels with a visited set."
+  ]
+ },
+ {
+  "order": 62,
+  "id": "lc-124",
+  "phase": 2,
+  "topic": "Trees",
+  "source": "leetcode",
+  "number": 124,
+  "title": "Binary Tree Maximum Path Sum",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/binary-tree-maximum-path-sum/",
+  "blind": false,
+  "note": "",
+  "description": "Find the maximum sum of any path between two nodes of a binary tree.",
+  "hints": [
+   "Separate what you return to your parent (one branch) from what you can complete at this node (both branches).",
+   "gain(node) = val + max(0, left, right); update best with val + max(0, left) + max(0, right). Keep best in a holder, not a static field."
+  ]
+ },
+ {
+  "order": 63,
+  "id": "lc-297",
+  "phase": 2,
+  "topic": "Trees",
+  "source": "leetcode",
+  "number": 297,
+  "title": "Serialize and Deserialize Binary Tree",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/serialize-and-deserialize-binary-tree/",
+  "blind": false,
+  "note": "",
+  "description": "Design an encoding of a binary tree to a string and back.",
+  "hints": [
+   "One traversal plus explicit null markers is enough to rebuild a tree uniquely.",
+   "Preorder with \"#\" for null, comma-separated; deserialize by recursing over an iterator of tokens."
+  ]
+ },
+ {
+  "order": 64,
+  "id": "lc-337",
+  "phase": 2,
+  "topic": "DP - trees",
+  "source": "leetcode",
+  "number": 337,
+  "title": "House Robber III",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/house-robber-iii/",
+  "blind": false,
+  "note": "",
+  "description": "Houses form a binary tree and you can't rob a node together with its child. Maximise the loot.",
+  "hints": [
+   "Each node has two states: robbed or not.",
+   "DFS returns {rob, skip}: rob = val + left.skip + right.skip; skip = max(left) + max(right)."
+  ]
+ },
+ {
+  "order": 65,
+  "id": "lc-968",
+  "phase": 2,
+  "topic": "DP - trees",
+  "source": "leetcode",
+  "number": 968,
+  "title": "Binary Tree Cameras",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/binary-tree-cameras/",
+  "blind": false,
+  "note": "",
+  "description": "Place the fewest cameras so every node is watched; a camera covers itself, its parent and its children.",
+  "hints": [
+   "Leaves should never hold cameras; their parents should. Work bottom-up.",
+   "Post-order states 0 = not covered, 1 = camera, 2 = covered: a 0 child forces a camera; a camera child means covered; otherwise return 0. Check the root at the end."
+  ]
+ },
+ {
+  "order": 66,
+  "id": "lc-347",
+  "phase": 2,
+  "topic": "Heap",
+  "source": "leetcode",
+  "number": 347,
+  "title": "Top K Frequent Elements",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/top-k-frequent-elements/",
+  "blind": false,
+  "note": "",
+  "description": "Return the k most frequent elements.",
+  "hints": [
+   "Count first; then you need the top k by count.",
+   "A min-heap of size k for O(n log k), or bucket sort by frequency for O(n)."
+  ]
+ },
+ {
+  "order": 67,
+  "id": "lc-973",
+  "phase": 2,
+  "topic": "Heap",
+  "source": "leetcode",
+  "number": 973,
+  "title": "K Closest Points to Origin",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/k-closest-points-to-origin/",
+  "blind": false,
+  "note": "",
+  "description": "Return the k points closest to the origin.",
+  "hints": [
+   "Compare squared distances; no square roots needed.",
+   "A max-heap of size k that evicts the farthest, or quickselect for average O(n)."
+  ]
+ },
+ {
+  "order": 68,
+  "id": "lc-621",
+  "phase": 2,
+  "topic": "Heap",
+  "source": "leetcode",
+  "number": 621,
+  "title": "Task Scheduler",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/task-scheduler/",
+  "blind": false,
+  "note": "",
+  "description": "Identical tasks need n idle units between them. Find the minimum total time, idle included.",
+  "hints": [
+   "The most frequent task sets the skeleton of the schedule.",
+   "Answer = max(tasks.length, (maxFreq - 1) * (n + 1) + number of tasks that have maxFreq)."
+  ]
+ },
+ {
+  "order": 69,
+  "id": "lc-1834",
+  "phase": 2,
+  "topic": "Heap",
+  "source": "leetcode",
+  "number": 1834,
+  "title": "Single-Threaded CPU",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/single-threaded-cpu/",
+  "blind": false,
+  "note": "",
+  "description": "A CPU takes tasks by enqueue time; when free it runs the available task with the shortest processing time, ties by index. Return the order.",
+  "hints": [
+   "Two orderings: by arrival to feed tasks in, and by (duration, index) to pick one.",
+   "Sort indices by enqueue time; min-heap on (duration, index); if the heap is empty, jump the clock to the next arrival. Time in long."
+  ]
+ },
+ {
+  "order": 70,
+  "id": "lc-355",
+  "phase": 2,
+  "topic": "Heap",
+  "source": "leetcode",
+  "number": 355,
+  "title": "Design Twitter",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/design-twitter/",
+  "blind": false,
+  "note": "",
+  "description": "Design post, follow, unfollow and a feed of the 10 most recent tweets from a user and the people they follow.",
+  "hints": [
+   "The feed merges several time-sorted lists, and you only need 10 items.",
+   "A global timestamp; per-user tweet lists; a max-heap seeded with each followee's newest tweet (k-way merge)."
+  ]
+ },
+ {
+  "order": 71,
+  "id": "lc-295",
+  "phase": 2,
+  "topic": "Heap",
+  "source": "leetcode",
+  "number": 295,
+  "title": "Find Median from Data Stream",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/find-median-from-data-stream/",
+  "blind": false,
+  "note": "",
+  "description": "Support addNum and findMedian on a stream of numbers.",
+  "hints": [
+   "Keep the lower half and the upper half apart.",
+   "Max-heap for the lower half, min-heap for the upper, sizes differing by at most 1; rebalance after every add."
+  ]
+ },
+ {
+  "order": 72,
+  "id": "lc-502",
+  "phase": 2,
+  "topic": "Heap",
+  "source": "leetcode",
+  "number": 502,
+  "title": "IPO",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/ipo/",
+  "blind": false,
+  "note": "",
+  "description": "Starting with capital w, do at most k projects (each needs capital and adds profit) to maximise your final capital.",
+  "hints": [
+   "Among the projects you can currently afford, the most profitable is always the right pick.",
+   "Sort by capital; push newly affordable profits into a max-heap; pop the best k times, stopping if the heap is empty."
+  ]
+ },
+ {
+  "order": 73,
+  "id": "lc-78",
+  "phase": 2,
+  "topic": "Backtracking",
+  "source": "leetcode",
+  "number": 78,
+  "title": "Subsets",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/subsets/",
+  "blind": false,
+  "note": "",
+  "description": "Return every subset of a set of distinct integers.",
+  "hints": [
+   "Each element is either in or out.",
+   "backtrack(start): add a copy of the current list, then for i from start add nums[i], recurse with i+1, remove. Or iterate bitmasks."
+  ]
+ },
+ {
+  "order": 74,
+  "id": "lc-39",
+  "phase": 2,
+  "topic": "Backtracking",
+  "source": "leetcode",
+  "number": 39,
+  "title": "Combination Sum",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/combination-sum/",
+  "blind": false,
+  "note": "",
+  "description": "Find every unique combination of candidates (reuse allowed) that sums to the target.",
+  "hints": [
+   "To avoid duplicate orderings, only move forward through the candidates.",
+   "backtrack(start, remain): for i >= start pick candidates[i] and recurse with i, not i+1. Sort to stop early when a candidate > remain."
+  ]
+ },
+ {
+  "order": 75,
+  "id": "lc-40",
+  "phase": 2,
+  "topic": "Backtracking",
+  "source": "leetcode",
+  "number": 40,
+  "title": "Combination Sum II",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/combination-sum-ii/",
+  "blind": false,
+  "note": "",
+  "description": "Same as Combination Sum, but each candidate is used once and the input has duplicates. No duplicate combinations.",
+  "hints": [
+   "Sort so equal values sit together.",
+   "Recurse with i+1; at the same depth skip i > start when candidates[i] == candidates[i-1]."
+  ]
+ },
+ {
+  "order": 76,
+  "id": "lc-46",
+  "phase": 2,
+  "topic": "Backtracking",
+  "source": "leetcode",
+  "number": 46,
+  "title": "Permutations",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/permutations/",
+  "blind": false,
+  "note": "",
+  "description": "Return every permutation of distinct integers.",
+  "hints": [
+   "Each position can take any element not used yet.",
+   "Backtrack with a boolean used[] (or swap in place); add a copy when the current list has length n."
+  ]
+ },
+ {
+  "order": 77,
+  "id": "lc-79",
+  "phase": 2,
+  "topic": "Backtracking",
+  "source": "leetcode",
+  "number": 79,
+  "title": "Word Search",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/word-search/",
+  "blind": false,
+  "note": "",
+  "description": "Decide whether a word can be traced through adjacent grid cells, using each cell at most once.",
+  "hints": [
+   "DFS from every cell that matches the first letter, marking the path.",
+   "Mark the cell (e.g. set it to '#') before recursing and restore it after. Stop early on a mismatch."
+  ]
+ },
+ {
+  "order": 78,
+  "id": "lc-131",
+  "phase": 2,
+  "topic": "Backtracking",
+  "source": "leetcode",
+  "number": 131,
+  "title": "Palindrome Partitioning",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/palindrome-partitioning/",
+  "blind": false,
+  "note": "",
+  "description": "Return every way to split a string into palindromic pieces.",
+  "hints": [
+   "Choose the first cut, then solve the rest.",
+   "Backtrack over end positions where s[start..end] is a palindrome; precompute isPal[i][j] so you don't recheck."
+  ]
+ },
+ {
+  "order": 79,
+  "id": "lc-51",
+  "phase": 2,
+  "topic": "Backtracking",
+  "source": "leetcode",
+  "number": 51,
+  "title": "N-Queens",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/n-queens/",
+  "blind": false,
+  "note": "",
+  "description": "Return every placement of n queens on an n x n board where none attack each other.",
+  "hints": [
+   "Exactly one queen per row, so choose a column row by row.",
+   "Track used columns and both diagonals (r + c and r - c + n) in boolean arrays for O(1) checks."
+  ]
+ },
+ {
+  "order": 80,
+  "id": "lc-55",
+  "phase": 2,
+  "topic": "Greedy",
+  "source": "leetcode",
+  "number": 55,
+  "title": "Jump Game",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/jump-game/",
+  "blind": false,
+  "note": "",
+  "description": "Given maximum jump lengths, decide whether you can reach the last index.",
+  "hints": [
+   "You don't need the path, only how far you can reach.",
+   "farthest = max(farthest, i + nums[i]); fail as soon as i > farthest."
+  ]
+ },
+ {
+  "order": 81,
+  "id": "lc-134",
+  "phase": 2,
+  "topic": "Greedy",
+  "source": "leetcode",
+  "number": 134,
+  "title": "Gas Station",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/gas-station/",
+  "blind": false,
+  "note": "",
+  "description": "On a circular route with gas and cost at each station, find the start that completes the loop, or -1.",
+  "hints": [
+   "If total gas < total cost it's impossible; otherwise a start exists and it's unique.",
+   "Keep a running tank; when it goes negative at i, no start up to i works, so start = i + 1 and reset the tank."
+  ]
+ },
+ {
+  "order": 82,
+  "id": "lc-763",
+  "phase": 2,
+  "topic": "Greedy",
+  "source": "leetcode",
+  "number": 763,
+  "title": "Partition Labels",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/partition-labels/",
+  "blind": false,
+  "note": "",
+  "description": "Split a string into as many parts as possible so each letter appears in only one part.",
+  "hints": [
+   "A part can't end before the last occurrence of any letter inside it.",
+   "Record each letter's last index; extend end = max(end, last[c]); when i == end, close the part."
+  ]
+ },
+ {
+  "order": 83,
+  "id": "lc-846",
+  "phase": 2,
+  "topic": "Greedy",
+  "source": "leetcode",
+  "number": 846,
+  "title": "Hand of Straights",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/hand-of-straights/",
+  "blind": false,
+  "note": "",
+  "description": "Decide whether the cards can be split into groups of groupSize consecutive values.",
+  "hints": [
+   "The smallest remaining card has to start a group.",
+   "TreeMap of counts; repeatedly take the smallest key x and use up x..x+groupSize-1, failing if any count runs short."
+  ]
+ },
+ {
+  "order": 84,
+  "id": "lc-135",
+  "phase": 2,
+  "topic": "Greedy",
+  "source": "leetcode",
+  "number": 135,
+  "title": "Candy",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/candy/",
+  "blind": false,
+  "note": "",
+  "description": "Children stand in a line with ratings; each gets at least one candy and a higher-rated child gets more than a neighbour. Minimise the candies.",
+  "hints": [
+   "The left-neighbour rule and the right-neighbour rule can be satisfied separately.",
+   "Left pass: c[i] = c[i-1] + 1 when the rating rises. Right pass: c[i] = max(c[i], c[i+1] + 1) when it falls. Sum."
+  ]
+ },
+ {
+  "order": 85,
+  "id": "lc-56",
+  "phase": 2,
+  "topic": "Intervals",
+  "source": "leetcode",
+  "number": 56,
+  "title": "Merge Intervals",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/merge-intervals/",
+  "blind": false,
+  "note": "",
+  "description": "Merge all overlapping intervals.",
+  "hints": [
+   "After sorting by start, an interval can only overlap the last merged one.",
+   "Sort by start; if the next start <= last end, extend the end with max; otherwise push a new interval."
+  ]
+ },
+ {
+  "order": 86,
+  "id": "lc-57",
+  "phase": 2,
+  "topic": "Intervals",
+  "source": "leetcode",
+  "number": 57,
+  "title": "Insert Interval",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/insert-interval/",
+  "blind": false,
+  "note": "",
+  "description": "Insert a new interval into a sorted list of non-overlapping intervals, merging where needed.",
+  "hints": [
+   "Three phases: before, overlapping, after.",
+   "Copy intervals that end before the new one starts; merge every interval starting <= the new end into it; copy the rest. O(n), no sort."
+  ]
+ },
+ {
+  "order": 87,
+  "id": "lc-435",
+  "phase": 2,
+  "topic": "Intervals",
+  "source": "leetcode",
+  "number": 435,
+  "title": "Non-overlapping Intervals",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/non-overlapping-intervals/",
+  "blind": false,
+  "note": "",
+  "description": "Find the minimum number of intervals to remove so the rest don't overlap.",
+  "hints": [
+   "Flip it: keep as many as possible.",
+   "Sort by end; keep an interval if its start >= the last kept end; the answer is n - kept."
+  ]
+ },
+ {
+  "order": 88,
+  "id": "lc-2406",
+  "phase": 2,
+  "topic": "Intervals",
+  "source": "leetcode",
+  "number": 2406,
+  "title": "Divide Intervals Into Minimum Number of Groups",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/divide-intervals-into-minimum-number-of-groups/",
+  "blind": false,
+  "note": "",
+  "description": "Split inclusive intervals into the fewest groups so no two intervals in a group overlap.",
+  "hints": [
+   "The answer equals the largest number of intervals overlapping at one point.",
+   "Sort by start; min-heap of group end times; reuse a group if its earliest end < start, else open one. (Or a sweep with +1 and -1 at right+1.)"
+  ]
+ },
+ {
+  "order": 89,
+  "id": "lc-1851",
+  "phase": 2,
+  "topic": "Intervals",
+  "source": "leetcode",
+  "number": 1851,
+  "title": "Minimum Interval to Include Each Query",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/minimum-interval-to-include-each-query/",
+  "blind": false,
+  "note": "",
+  "description": "For each query, return the size of the smallest interval that contains it, or -1.",
+  "hints": [
+   "Answer the queries offline, in sorted order.",
+   "Sort intervals by left and queries by value; push intervals with left <= q into a min-heap on (size, right); pop those with right < q; the top answers q."
+  ]
+ },
+ {
+  "order": 90,
+  "id": "lc-322",
+  "phase": 2,
+  "topic": "DP - knapsack",
+  "source": "leetcode",
+  "number": 322,
+  "title": "Coin Change",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/coin-change/",
+  "blind": false,
+  "note": "",
+  "description": "Find the fewest coins (unlimited supply) that make an amount, or -1.",
+  "hints": [
+   "Unbounded knapsack that minimises a count.",
+   "dp[a] = min over coins of dp[a - c] + 1, with dp[0] = 0 and amount + 1 as infinity."
+  ]
+ },
+ {
+  "order": 91,
+  "id": "lc-518",
+  "phase": 2,
+  "topic": "DP - knapsack",
+  "source": "leetcode",
+  "number": 518,
+  "title": "Coin Change II",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/coin-change-ii/",
+  "blind": false,
+  "note": "",
+  "description": "Count the combinations of coins that make an amount.",
+  "hints": [
+   "Combinations, not permutations: the loop order decides which you count.",
+   "Outer loop over coins, inner loop over amounts ascending: dp[a] += dp[a - c], with dp[0] = 1."
+  ]
+ },
+ {
+  "order": 92,
+  "id": "lc-416",
+  "phase": 2,
+  "topic": "DP - knapsack",
+  "source": "leetcode",
+  "number": 416,
+  "title": "Partition Equal Subset Sum",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/partition-equal-subset-sum/",
+  "blind": false,
+  "note": "",
+  "description": "Decide whether an array can be split into two subsets with equal sums.",
+  "hints": [
+   "Reduce it: is there a subset summing to total / 2?",
+   "0/1 knapsack over sums, iterating sums downward for each number (or a BitSet shift). An odd total means false."
+  ]
+ },
+ {
+  "order": 93,
+  "id": "lc-494",
+  "phase": 2,
+  "topic": "DP - knapsack",
+  "source": "leetcode",
+  "number": 494,
+  "title": "Target Sum",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/target-sum/",
+  "blind": false,
+  "note": "",
+  "description": "Put + or - before each number and count the ways to reach a target.",
+  "hints": [
+   "Let P be the plus set: sum(P) - (total - sum(P)) = target. Solve for sum(P).",
+   "Count subsets with sum (total + target) / 2 using 0/1 knapsack counting; zero ways if that is negative or not whole."
+  ]
+ },
+ {
+  "order": 94,
+  "id": "lc-474",
+  "phase": 2,
+  "topic": "DP - knapsack",
+  "source": "leetcode",
+  "number": 474,
+  "title": "Ones and Zeroes",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/ones-and-zeroes/",
+  "blind": false,
+  "note": "",
+  "description": "Find the largest subset of binary strings using at most m zeros and n ones in total.",
+  "hints": [
+   "A 0/1 knapsack with two capacities.",
+   "dp[i][j] = the largest subset with i zeros and j ones; per string, loop i and j downward: dp[i][j] = max(dp[i][j], dp[i-z][j-o] + 1)."
+  ]
+ },
+ {
+  "order": 95,
+  "id": "lc-1049",
+  "phase": 2,
+  "topic": "DP - knapsack",
+  "source": "leetcode",
+  "number": 1049,
+  "title": "Last Stone Weight II",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/last-stone-weight-ii/",
+  "blind": false,
+  "note": "",
+  "description": "Smashing stones x <= y leaves y - x. Minimise the weight of the last stone.",
+  "hints": [
+   "The result is the difference between the sums of two groups.",
+   "Find the largest reachable subset sum s <= total / 2 (0/1 knapsack); the answer is total - 2s."
+  ]
+ },
+ {
+  "order": 96,
+  "id": "cses-1158",
+  "phase": 2,
+  "topic": "DP - knapsack",
+  "source": "cses",
+  "number": 1158,
+  "title": "Book Shop",
+  "difficulty": "medium",
+  "url": "https://cses.fi/problemset/task/1158",
+  "blind": false,
+  "note": "CSES: classic 0/1 knapsack with tight limits",
+  "description": "Given book prices, page counts and a budget x, maximise the pages you can buy, each book at most once.",
+  "hints": [
+   "Classic 0/1 knapsack with n up to 1000 and x up to 1e5.",
+   "A 1D dp over the budget, iterated downward per book. CSES is tight in Java: read input fast (DataInputStream or StreamTokenizer)."
+  ]
+ },
+ {
+  "order": 97,
+  "id": "lc-1143",
+  "phase": 2,
+  "topic": "DP - strings",
+  "source": "leetcode",
+  "number": 1143,
+  "title": "Longest Common Subsequence",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/longest-common-subsequence/",
+  "blind": false,
+  "note": "",
+  "description": "Find the length of the longest common subsequence of two strings.",
+  "hints": [
+   "Compare the last characters of the two prefixes.",
+   "dp[i][j] = dp[i-1][j-1] + 1 if they match, else max(dp[i-1][j], dp[i][j-1]). Two rows are enough."
+  ]
+ },
+ {
+  "order": 98,
+  "id": "lc-72",
+  "phase": 2,
+  "topic": "DP - strings",
+  "source": "leetcode",
+  "number": 72,
+  "title": "Edit Distance",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/edit-distance/",
+  "blind": false,
+  "note": "",
+  "description": "Find the minimum inserts, deletes and replacements to turn word1 into word2.",
+  "hints": [
+   "The state is a pair of prefixes; each operation shrinks one or both.",
+   "dp[i][j] = dp[i-1][j-1] if the characters match, else 1 + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]). Base row and column are i and j."
+  ]
+ },
+ {
+  "order": 99,
+  "id": "lc-5",
+  "phase": 2,
+  "topic": "DP - strings",
+  "source": "leetcode",
+  "number": 5,
+  "title": "Longest Palindromic Substring",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/longest-palindromic-substring/",
+  "blind": false,
+  "note": "",
+  "description": "Return the longest palindromic substring.",
+  "hints": [
+   "Every palindrome has a centre: a character or the gap between two.",
+   "Expand around each of the 2n - 1 centres: O(n^2) time, O(1) space. (Manacher is O(n) but rarely expected.)"
+  ]
+ },
+ {
+  "order": 100,
+  "id": "lc-516",
+  "phase": 2,
+  "topic": "DP - strings",
+  "source": "leetcode",
+  "number": 516,
+  "title": "Longest Palindromic Subsequence",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/longest-palindromic-subsequence/",
+  "blind": false,
+  "note": "",
+  "description": "Find the length of the longest palindromic subsequence.",
+  "hints": [
+   "Interval state: the best answer inside s[i..j].",
+   "dp[i][j] = dp[i+1][j-1] + 2 if s[i] == s[j], else max(dp[i+1][j], dp[i][j-1]); fill i from the end. (Or LCS of s and its reverse.)"
+  ]
+ },
+ {
+  "order": 101,
+  "id": "lc-97",
+  "phase": 2,
+  "topic": "DP - strings",
+  "source": "leetcode",
+  "number": 97,
+  "title": "Interleaving String",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/interleaving-string/",
+  "blind": false,
+  "note": "",
+  "description": "Decide whether s3 is an interleaving of s1 and s2.",
+  "hints": [
+   "After using i characters of s1 and j of s2, the next character of s3 is at i + j.",
+   "dp[i][j] = (dp[i-1][j] and s1[i-1] == s3[i+j-1]) or (dp[i][j-1] and s2[j-1] == s3[i+j-1]). Check the lengths first."
+  ]
+ },
+ {
+  "order": 102,
+  "id": "lc-115",
+  "phase": 2,
+  "topic": "DP - strings",
+  "source": "leetcode",
+  "number": 115,
+  "title": "Distinct Subsequences",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/distinct-subsequences/",
+  "blind": false,
+  "note": "",
+  "description": "Count the distinct subsequences of s that equal t.",
+  "hints": [
+   "At s[i], if it matches t[j] you may use it or skip it.",
+   "dp[i][j] = dp[i-1][j] + (s[i-1] == t[j-1] ? dp[i-1][j-1] : 0), with dp[i][0] = 1. In 1D, loop j downward."
+  ]
+ },
+ {
+  "order": 103,
+  "id": "lc-10",
+  "phase": 2,
+  "topic": "DP - strings",
+  "source": "leetcode",
+  "number": 10,
+  "title": "Regular Expression Matching",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/regular-expression-matching/",
+  "blind": false,
+  "note": "",
+  "description": "Match a whole string against a pattern with '.' and '*'.",
+  "hints": [
+   "'*' lets the previous element match zero times, or one more time.",
+   "dp[i][j] for s[0..i) vs p[0..j): on '*', dp[i][j-2] or (match(s[i-1], p[j-2]) and dp[i-1][j]); otherwise match and dp[i-1][j-1]. Seed dp[0][j] for patterns like a*b*."
+  ]
+ },
+ {
+  "order": 104,
+  "id": "lc-208",
+  "phase": 2,
+  "topic": "Trie",
+  "source": "leetcode",
+  "number": 208,
+  "title": "Implement Trie (Prefix Tree)",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/implement-trie-prefix-tree/",
+  "blind": false,
+  "note": "",
+  "description": "Implement insert, search and startsWith for a prefix tree.",
+  "hints": [
+   "Each node holds children by letter plus an end-of-word flag.",
+   "Node with Node[26] children and a boolean end; walk character by character, creating nodes on insert."
+  ]
+ },
+ {
+  "order": 105,
+  "id": "lc-211",
+  "phase": 2,
+  "topic": "Trie",
+  "source": "leetcode",
+  "number": 211,
+  "title": "Design Add and Search Words Data Structure",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/design-add-and-search-words-data-structure/",
+  "blind": false,
+  "note": "",
+  "description": "Like a trie, but search accepts '.' as any letter.",
+  "hints": [
+   "A '.' means trying every child at that level.",
+   "Trie plus a recursive dfs(node, index); on '.', loop over the non-null children."
+  ]
+ },
+ {
+  "order": 106,
+  "id": "lc-421",
+  "phase": 2,
+  "topic": "Trie",
+  "source": "leetcode",
+  "number": 421,
+  "title": "Maximum XOR of Two Numbers in an Array",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/",
+  "blind": false,
+  "note": "",
+  "description": "Find the maximum XOR of any two numbers in an array.",
+  "hints": [
+   "To maximise XOR, decide bits from the highest down, preferring the opposite bit.",
+   "A binary trie over 31 bits; for each number walk the trie preferring the opposite bit to build the best XOR."
+  ]
+ },
+ {
+  "order": 107,
+  "id": "lc-212",
+  "phase": 2,
+  "topic": "Trie",
+  "source": "leetcode",
+  "number": 212,
+  "title": "Word Search II",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/word-search-ii/",
+  "blind": false,
+  "note": "",
+  "description": "Find every dictionary word that can be traced through adjacent cells of a grid.",
+  "hints": [
+   "Searching for each word separately repeats work. Search for all words at once.",
+   "Build a trie of the words; DFS from each cell following trie children; store words at end nodes, clear them once found, and prune empty branches."
+  ]
+ },
+ {
+  "order": 108,
+  "id": "lc-309",
+  "phase": 3,
+  "topic": "DP - state machine",
+  "source": "leetcode",
+  "number": 309,
+  "title": "Best Time to Buy and Sell Stock with Cooldown",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/",
+  "blind": false,
+  "note": "",
+  "description": "Maximise stock profit with unlimited transactions but a one-day cooldown after every sale.",
+  "hints": [
+   "Each day you are in one of three states: holding, just sold, or resting.",
+   "From yesterday's values: hold = max(hold, rest - p); sold = hold + p; rest = max(rest, sold). The answer is max(sold, rest)."
+  ]
+ },
+ {
+  "order": 109,
+  "id": "lc-714",
+  "phase": 3,
+  "topic": "DP - state machine",
+  "source": "leetcode",
+  "number": 714,
+  "title": "Best Time to Buy and Sell Stock with Transaction Fee",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/",
+  "blind": false,
+  "note": "",
+  "description": "Maximise stock profit with unlimited transactions and a fee on each one.",
+  "hints": [
+   "Two states: holding a share or not.",
+   "cash = max(cash, hold + p - fee); hold = max(hold, cash - p); start with hold = -prices[0]."
+  ]
+ },
+ {
+  "order": 110,
+  "id": "lc-123",
+  "phase": 3,
+  "topic": "DP - state machine",
+  "source": "leetcode",
+  "number": 123,
+  "title": "Best Time to Buy and Sell Stock III",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/",
+  "blind": false,
+  "note": "",
+  "description": "Maximise stock profit with at most two transactions.",
+  "hints": [
+   "Four states: after the first buy, first sell, second buy, second sell.",
+   "b1 = max(b1, -p); s1 = max(s1, b1 + p); b2 = max(b2, s1 - p); s2 = max(s2, b2 + p). The answer is s2."
+  ]
+ },
+ {
+  "order": 111,
+  "id": "lc-188",
+  "phase": 3,
+  "topic": "DP - state machine",
+  "source": "leetcode",
+  "number": 188,
+  "title": "Best Time to Buy and Sell Stock IV",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/",
+  "blind": false,
+  "note": "",
+  "description": "Maximise stock profit with at most k transactions.",
+  "hints": [
+   "Generalise the four states of Stock III into arrays of length k.",
+   "buy[j] = max(buy[j], sell[j-1] - p); sell[j] = max(sell[j], buy[j] + p). If k >= n/2, it's just unlimited transactions."
+  ]
+ },
+ {
+  "order": 112,
+  "id": "lc-1039",
+  "phase": 3,
+  "topic": "DP - interval",
+  "source": "leetcode",
+  "number": 1039,
+  "title": "Minimum Score Triangulation of Polygon",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/minimum-score-triangulation-of-polygon/",
+  "blind": false,
+  "note": "",
+  "description": "Triangulate a convex polygon to minimise the sum, over triangles, of the product of their vertex values.",
+  "hints": [
+   "Edge (i, j) belongs to exactly one triangle, whose third vertex k lies between them.",
+   "dp[i][j] = min over i < k < j of dp[i][k] + dp[k][j] + v[i]*v[k]*v[j]; fill by increasing gap."
+  ]
+ },
+ {
+  "order": 113,
+  "id": "lc-375",
+  "phase": 3,
+  "topic": "DP - interval",
+  "source": "leetcode",
+  "number": 375,
+  "title": "Guess Number Higher or Lower II",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/guess-number-higher-or-lower-ii/",
+  "blind": false,
+  "note": "",
+  "description": "Each wrong guess x costs x. Find how much money guarantees a win when guessing a number in 1..n.",
+  "hints": [
+   "Minimax: you choose the guess, an adversary chooses the worse side.",
+   "dp[l][r] = min over k of k + max(dp[l][k-1], dp[k+1][r]), with dp[l][r] = 0 when l >= r."
+  ]
+ },
+ {
+  "order": 114,
+  "id": "lc-1547",
+  "phase": 3,
+  "topic": "DP - interval",
+  "source": "leetcode",
+  "number": 1547,
+  "title": "Minimum Cost to Cut a Stick",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/minimum-cost-to-cut-a-stick/",
+  "blind": false,
+  "note": "",
+  "description": "Cut a stick at given positions in any order; each cut costs the length of the piece being cut. Minimise the total.",
+  "hints": [
+   "Pick which cut happens first inside a segment between two cut points; it splits the problem into two independent segments.",
+   "Sort the cuts and add 0 and n; dp[i][j] = min over i < k < j of dp[i][k] + dp[k][j] + (c[j] - c[i])."
+  ]
+ },
+ {
+  "order": 115,
+  "id": "lc-312",
+  "phase": 3,
+  "topic": "DP - interval",
+  "source": "leetcode",
+  "number": 312,
+  "title": "Burst Balloons",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/burst-balloons/",
+  "blind": false,
+  "note": "",
+  "description": "Bursting a balloon earns left * it * right using its current neighbours. Maximise the coins.",
+  "hints": [
+   "Choosing the first balloon to burst tangles up the neighbours. Choose the last one instead.",
+   "Pad with 1s; dp[l][r] = max over l < k < r of dp[l][k] + dp[k][r] + a[l]*a[k]*a[r], bounds exclusive."
+  ]
+ },
+ {
+  "order": 116,
+  "id": "lc-698",
+  "phase": 3,
+  "topic": "DP - bitmask",
+  "source": "leetcode",
+  "number": 698,
+  "title": "Partition to K Equal Sum Subsets",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/partition-to-k-equal-sum-subsets/",
+  "blind": false,
+  "note": "",
+  "description": "Decide whether an array (up to 16 numbers) can be split into k non-empty subsets with equal sums.",
+  "hints": [
+   "With 16 elements, \"which ones are used\" fits in a bitmask.",
+   "dp[mask] = how full the current bucket is (mod target), or -1 if unreachable; add element i when dp[mask] + nums[i] <= target. Sorted backtracking also works."
+  ]
+ },
+ {
+  "order": 117,
+  "id": "lc-1986",
+  "phase": 3,
+  "topic": "DP - bitmask",
+  "source": "leetcode",
+  "number": 1986,
+  "title": "Minimum Number of Work Sessions to Finish the Tasks",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/minimum-number-of-work-sessions-to-finish-the-tasks/",
+  "blind": false,
+  "note": "",
+  "description": "Fit tasks (up to 14) into the fewest work sessions of at most sessionTime each.",
+  "hints": [
+   "Again a small n: the state is the set of finished tasks.",
+   "dp[mask] = (sessions used, time used in the current session), minimised in that order; add one unfinished task at a time, opening a new session when it doesn't fit."
+  ]
+ },
+ {
+  "order": 118,
+  "id": "lc-847",
+  "phase": 3,
+  "topic": "DP - bitmask",
+  "source": "leetcode",
+  "number": 847,
+  "title": "Shortest Path Visiting All Nodes",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/shortest-path-visiting-all-nodes/",
+  "blind": false,
+  "note": "",
+  "description": "Find the shortest walk that visits every node of a small undirected graph (up to 12 nodes); revisits are allowed.",
+  "hints": [
+   "The state is (current node, set of visited nodes).",
+   "Multi-source BFS from every (i, 1 << i); the first state with the full mask gives the answer."
+  ]
+ },
+ {
+  "order": 119,
+  "id": "cses-1653",
+  "phase": 3,
+  "topic": "DP - bitmask",
+  "source": "cses",
+  "number": 1653,
+  "title": "Elevator Rides",
+  "difficulty": "hard",
+  "url": "https://cses.fi/problemset/task/1653",
+  "blind": false,
+  "note": "CSES",
+  "description": "People (up to 20) with weights must ride an elevator that holds at most x. Minimise the number of rides.",
+  "hints": [
+   "The same structure as Work Sessions, with tighter limits.",
+   "dp[mask] = (rides, weight in the last ride); for each person not in mask, add them to the last ride or start a new one; keep the smaller pair."
+  ]
+ },
+ {
+  "order": 120,
+  "id": "lc-307",
+  "phase": 3,
+  "topic": "Range queries",
+  "source": "leetcode",
+  "number": 307,
+  "title": "Range Sum Query - Mutable",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/range-sum-query-mutable/",
+  "blind": false,
+  "note": "",
+  "description": "Support point updates and range sum queries on an array.",
+  "hints": [
+   "Prefix sums make each update O(n). You want both operations in O(log n).",
+   "A Fenwick tree (add a delta; query(r) - query(l - 1)) or a segment tree. Try the Fenwick tree, since it's new for you."
+  ]
+ },
+ {
+  "order": 121,
+  "id": "lc-315",
+  "phase": 3,
+  "topic": "Range queries",
+  "source": "leetcode",
+  "number": 315,
+  "title": "Count of Smaller Numbers After Self",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/count-of-smaller-numbers-after-self/",
+  "blind": false,
+  "note": "",
+  "description": "For each element, count the smaller elements to its right.",
+  "hints": [
+   "Go from the right and ask: how many values seen so far are below x?",
+   "Compress values to ranks, then a Fenwick tree over ranks: query(rank - 1), then add(rank). Merge-sort counting works too."
+  ]
+ },
+ {
+  "order": 122,
+  "id": "cses-1648",
+  "phase": 3,
+  "topic": "Range queries",
+  "source": "cses",
+  "number": 1648,
+  "title": "Dynamic Range Sum Queries",
+  "difficulty": "medium",
+  "url": "https://cses.fi/problemset/task/1648",
+  "blind": false,
+  "note": "CSES: segment tree or Fenwick",
+  "description": "Support \"set position k to u\" and \"sum of positions a..b\" on an array.",
+  "hints": [
+   "Updates set a value, so turn each into a delta from the current value.",
+   "A Fenwick tree with longs, keeping the array to compute deltas. Fast input in Java."
+  ]
+ },
+ {
+  "order": 123,
+  "id": "cses-1649",
+  "phase": 3,
+  "topic": "Range queries",
+  "source": "cses",
+  "number": 1649,
+  "title": "Dynamic Range Minimum Queries",
+  "difficulty": "medium",
+  "url": "https://cses.fi/problemset/task/1649",
+  "blind": false,
+  "note": "CSES",
+  "description": "Support \"set position k to u\" and \"minimum of positions a..b\".",
+  "hints": [
+   "Minimum can't be undone like a sum, so prefix tricks don't apply directly.",
+   "An iterative segment tree (size 2n, bottom-up update and query) is short and fast."
+  ]
+ },
+ {
+  "order": 124,
+  "id": "cses-1651",
+  "phase": 3,
+  "topic": "Range queries",
+  "source": "cses",
+  "number": 1651,
+  "title": "Range Update Queries",
+  "difficulty": "medium",
+  "url": "https://cses.fi/problemset/task/1651",
+  "blind": false,
+  "note": "CSES: range update, point query",
+  "description": "Support \"add u to positions a..b\" and \"what is the value at position k\".",
+  "hints": [
+   "Range update plus point query on the array is point update plus prefix query on its difference array.",
+   "Fenwick tree on differences: add(a, u), add(b + 1, -u); the value at k is original[k] + prefix(k)."
+  ]
+ },
+ {
+  "order": 125,
+  "id": "cses-1143",
+  "phase": 3,
+  "topic": "Range queries",
+  "source": "cses",
+  "number": 1143,
+  "title": "Hotel Queries",
+  "difficulty": "hard",
+  "url": "https://cses.fi/problemset/task/1143",
+  "blind": false,
+  "note": "CSES: segment tree descent",
+  "description": "Hotels in a row have free rooms; each group takes the first hotel with enough rooms. Report the hotel for each group.",
+  "hints": [
+   "You need \"the first index whose value >= r\", with point updates.",
+   "A max segment tree; from the root go left whenever the left child's max >= r; subtract r at the leaf and update upward."
+  ]
+ },
+ {
+  "order": 126,
+  "id": "lc-191",
+  "phase": 3,
+  "topic": "Bits and math",
+  "source": "leetcode",
+  "number": 191,
+  "title": "Number of 1 Bits",
+  "difficulty": "easy",
+  "url": "https://leetcode.com/problems/number-of-1-bits/",
+  "blind": false,
+  "note": "",
+  "description": "Count the set bits of an integer.",
+  "hints": [
+   "n & (n - 1) clears the lowest set bit.",
+   "Loop while n != 0 with n &= n - 1, counting. In Java, compare with != 0 rather than > 0 so it works for the sign bit."
+  ]
+ },
+ {
+  "order": 127,
+  "id": "lc-338",
+  "phase": 3,
+  "topic": "Bits and math",
+  "source": "leetcode",
+  "number": 338,
+  "title": "Counting Bits",
+  "difficulty": "easy",
+  "url": "https://leetcode.com/problems/counting-bits/",
+  "blind": false,
+  "note": "",
+  "description": "Return the number of set bits for every number from 0 to n.",
+  "hints": [
+   "Relate i to a smaller number you've already counted.",
+   "bits[i] = bits[i >> 1] + (i & 1), or bits[i] = bits[i & (i - 1)] + 1."
+  ]
+ },
+ {
+  "order": 128,
+  "id": "lc-137",
+  "phase": 3,
+  "topic": "Bits and math",
+  "source": "leetcode",
+  "number": 137,
+  "title": "Single Number II",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/single-number-ii/",
+  "blind": false,
+  "note": "",
+  "description": "Every element appears three times except one. Find it in O(1) space.",
+  "hints": [
+   "Count each bit position across all numbers, modulo 3.",
+   "For each of the 32 bits sum it over all numbers; if the sum % 3 != 0, set that bit in the answer. (Or the ones/twos mask trick.)"
+  ]
+ },
+ {
+  "order": 129,
+  "id": "lc-371",
+  "phase": 3,
+  "topic": "Bits and math",
+  "source": "leetcode",
+  "number": 371,
+  "title": "Sum of Two Integers",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/sum-of-two-integers/",
+  "blind": false,
+  "note": "",
+  "description": "Add two integers without using + or -.",
+  "hints": [
+   "XOR adds without carries; AND shows where the carries are.",
+   "Loop: carry = (a & b) << 1; a = a ^ b; b = carry; until b == 0. Java's two's complement handles negatives."
+  ]
+ },
+ {
+  "order": 130,
+  "id": "lc-50",
+  "phase": 3,
+  "topic": "Bits and math",
+  "source": "leetcode",
+  "number": 50,
+  "title": "Pow(x, n)",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/powx-n/",
+  "blind": false,
+  "note": "",
+  "description": "Compute x raised to the power n.",
+  "hints": [
+   "x^n = (x^(n/2))^2, times x when n is odd.",
+   "Fast exponentiation with long N = n (negating Integer.MIN_VALUE overflows); if N < 0, invert x first."
+  ]
+ },
+ {
+  "order": 131,
+  "id": "lc-43",
+  "phase": 3,
+  "topic": "Bits and math",
+  "source": "leetcode",
+  "number": 43,
+  "title": "Multiply Strings",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/multiply-strings/",
+  "blind": false,
+  "note": "",
+  "description": "Multiply two non-negative numbers given as strings.",
+  "hints": [
+   "Digit i of one number times digit j of the other lands in positions i + j and i + j + 1.",
+   "An int[m + n] result; add products from the right, carry forward, then build the string without leading zeros."
+  ]
+ },
+ {
+  "order": 132,
+  "id": "lc-380",
+  "phase": 3,
+  "topic": "Design",
+  "source": "leetcode",
+  "number": 380,
+  "title": "Insert Delete GetRandom O(1)",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/insert-delete-getrandom-o1/",
+  "blind": false,
+  "note": "",
+  "description": "Design a set with average O(1) insert, remove and getRandom.",
+  "hints": [
+   "Random picks need an array; O(1) removal from an array needs a trick.",
+   "ArrayList plus HashMap value to index; to remove, move the last element into the gap and update its index."
+  ]
+ },
+ {
+  "order": 133,
+  "id": "lc-1396",
+  "phase": 3,
+  "topic": "Design",
+  "source": "leetcode",
+  "number": 1396,
+  "title": "Design Underground System",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/design-underground-system/",
+  "blind": false,
+  "note": "",
+  "description": "Track check-ins and check-outs and report the average travel time between two stations.",
+  "hints": [
+   "Two maps: trips in progress, and stats for finished routes.",
+   "id to (station, time); \"from,to\" to (total time, count), updated on check-out."
+  ]
+ },
+ {
+  "order": 134,
+  "id": "lc-460",
+  "phase": 3,
+  "topic": "Design",
+  "source": "leetcode",
+  "number": 460,
+  "title": "LFU Cache",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/lfu-cache/",
+  "blind": false,
+  "note": "",
+  "description": "Design a cache that evicts the least frequently used key, ties broken by least recent use, all in O(1).",
+  "hints": [
+   "Group keys by frequency, and keep recency order inside each group.",
+   "key to node, frequency to LinkedHashSet (or a DLL) of keys, plus minFreq; on access move the key to freq + 1; on insert minFreq = 1."
+  ]
+ },
+ {
+  "order": 135,
+  "id": "lc-994",
+  "phase": 3,
+  "topic": "Graphs",
+  "source": "leetcode",
+  "number": 994,
+  "title": "Rotting Oranges",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/rotting-oranges/",
+  "blind": true,
+  "note": "",
+  "description": "Each minute, fresh oranges next to rotten ones rot. Return the minutes until none are fresh, or -1.",
+  "hints": [
+   "Every rotten orange spreads at the same time. What processes things in waves?",
+   "Multi-source BFS from all rotten cells, counting levels; then check that no fresh orange is left."
+  ]
+ },
+ {
+  "order": 136,
+  "id": "lc-1438",
+  "phase": 3,
+  "topic": "Sliding window",
+  "source": "leetcode",
+  "number": 1438,
+  "title": "Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/",
+  "blind": true,
+  "note": "",
+  "description": "Find the longest subarray whose max - min is at most limit.",
+  "hints": [
+   "If a range is valid, every range inside it is too. What does that let two indices do?",
+   "A sliding window with two monotonic deques (for max and min); shrink while max - min > limit."
+  ]
+ },
+ {
+  "order": 137,
+  "id": "lc-417",
+  "phase": 3,
+  "topic": "Graphs",
+  "source": "leetcode",
+  "number": 417,
+  "title": "Pacific Atlantic Water Flow",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/pacific-atlantic-water-flow/",
+  "blind": true,
+  "note": "",
+  "description": "Water flows to neighbours of equal or lower height. Find the cells that can reach both the top/left ocean and the bottom/right ocean.",
+  "hints": [
+   "Asking \"where can this cell flow?\" for every cell repeats work. Turn the question around.",
+   "Search uphill (to heights >= current) from each ocean's border cells; the answer is the cells reached by both."
+  ]
+ },
+ {
+  "order": 138,
+  "id": "lc-2402",
+  "phase": 3,
+  "topic": "Heap",
+  "source": "leetcode",
+  "number": 2402,
+  "title": "Meeting Rooms III",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/meeting-rooms-iii/",
+  "blind": true,
+  "note": "",
+  "description": "Meetings take the lowest-numbered free room, or wait for the room that frees first and keep their length. Which room hosts the most meetings?",
+  "hints": [
+   "Simulate in start order. Each meeting needs both \"lowest free room\" and \"busy room that finishes first\".",
+   "Two heaps: free rooms by number, busy rooms by (end, number). Free every room ending <= start; if none are free, delay to the earliest end. Use long times."
+  ]
+ },
+ {
+  "order": 139,
+  "id": "lc-1976",
+  "phase": 3,
+  "topic": "Graphs",
+  "source": "leetcode",
+  "number": 1976,
+  "title": "Number of Ways to Arrive at Destination",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/number-of-ways-to-arrive-at-destination/",
+  "blind": true,
+  "note": "",
+  "description": "Count the shortest paths from 0 to n-1 in a weighted graph, modulo 1e9+7.",
+  "hints": [
+   "You need the shortest distance and, alongside it, how many ways reach it.",
+   "Dijkstra with long distances; on a strictly shorter distance set ways[v] = ways[u]; on an equal one add ways[u]."
+  ]
+ },
+ {
+  "order": 140,
+  "id": "lc-992",
+  "phase": 3,
+  "topic": "Sliding window",
+  "source": "leetcode",
+  "number": 992,
+  "title": "Subarrays with K Different Integers",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/subarrays-with-k-different-integers/",
+  "blind": true,
+  "note": "",
+  "description": "Count the subarrays with exactly k distinct values.",
+  "hints": [
+   "\"Exactly k\" is awkward to count directly. \"At most k\" is easy.",
+   "exactly(k) = atMost(k) - atMost(k - 1), each a sliding window with a count map."
+  ]
+ },
+ {
+  "order": 141,
+  "id": "lc-127",
+  "phase": 3,
+  "topic": "Graphs",
+  "source": "leetcode",
+  "number": 127,
+  "title": "Word Ladder",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/word-ladder/",
+  "blind": true,
+  "note": "",
+  "description": "Find the length of the shortest chain from beginWord to endWord, changing one letter at a time through dictionary words.",
+  "hints": [
+   "Each word is a node; a one-letter change is an edge, and every edge costs the same.",
+   "BFS; generate neighbours by trying 26 letters per position against a HashSet (remove when visited), or use wildcard patterns like h*t."
+  ]
+ },
+ {
+  "order": 142,
+  "id": "lc-1696",
+  "phase": 3,
+  "topic": "DP - linear",
+  "source": "leetcode",
+  "number": 1696,
+  "title": "Jump Game VI",
+  "difficulty": "medium",
+  "url": "https://leetcode.com/problems/jump-game-vi/",
+  "blind": true,
+  "note": "",
+  "description": "Jump 1 to k steps forward each time; your score is the sum of values you land on. Maximise the score at the end.",
+  "hints": [
+   "dp[i] = nums[i] + the best dp in the last k positions. Done naively that's O(nk).",
+   "Keep the window max with a deque of indices whose dp values decrease."
+  ]
+ },
+ {
+  "order": 143,
+  "id": "lc-778",
+  "phase": 3,
+  "topic": "Graphs",
+  "source": "leetcode",
+  "number": 778,
+  "title": "Swim in Rising Water",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/swim-in-rising-water/",
+  "blind": true,
+  "note": "",
+  "description": "At time t you can swim through cells with elevation <= t. Find the earliest time you can reach the bottom-right.",
+  "hints": [
+   "A path's cost is its highest cell, not its sum.",
+   "A min-heap on max-so-far (Dijkstra style), or binary search t with BFS, or union-find adding cells by height."
+  ]
+ },
+ {
+  "order": 144,
+  "id": "lc-85",
+  "phase": 3,
+  "topic": "Stack and monotonic stack",
+  "source": "leetcode",
+  "number": 85,
+  "title": "Maximal Rectangle",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/maximal-rectangle/",
+  "blind": true,
+  "note": "",
+  "description": "Find the largest rectangle of 1s in a binary matrix.",
+  "hints": [
+   "Fix the bottom row of the rectangle and look at the columns of 1s standing on it.",
+   "Build column heights row by row and run Largest Rectangle in Histogram (monotonic stack) on each row."
+  ]
+ },
+ {
+  "order": 145,
+  "id": "lc-2092",
+  "phase": 3,
+  "topic": "Graphs",
+  "source": "leetcode",
+  "number": 2092,
+  "title": "Find All People With Secret",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/find-all-people-with-secret/",
+  "blind": true,
+  "note": "",
+  "description": "Person 0 tells firstPerson a secret at time 0, and meetings at the same time pass it on instantly. Return everyone who ends up knowing it.",
+  "hints": [
+   "Meetings at the same moment form groups, but links must not carry over to later times.",
+   "Sort by time; per time batch, union the pairs, then reset every person in the batch who isn't connected to 0. (Or BFS per batch.)"
+  ]
+ },
+ {
+  "order": 146,
+  "id": "lc-2009",
+  "phase": 3,
+  "topic": "Sliding window",
+  "source": "leetcode",
+  "number": 2009,
+  "title": "Minimum Number of Operations to Make Array Continuous",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/minimum-number-of-operations-to-make-array-continuous/",
+  "blind": true,
+  "note": "",
+  "description": "An array is continuous when its values are unique and max - min = n - 1. One operation replaces any element. Minimise operations.",
+  "hints": [
+   "Choose which values to keep; they must fit in a range of length n.",
+   "Sort the unique values; for each start v count uniques in [v, v + n - 1] with two pointers; the answer is n - most kept."
+  ]
+ },
+ {
+  "order": 147,
+  "id": "lc-1293",
+  "phase": 3,
+  "topic": "Graphs",
+  "source": "leetcode",
+  "number": 1293,
+  "title": "Shortest Path in a Grid with Obstacles Elimination",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/",
+  "blind": true,
+  "note": "",
+  "description": "Find the shortest path from top-left to bottom-right if you may remove up to k obstacles.",
+  "hints": [
+   "The position alone isn't enough state.",
+   "BFS over (r, c, removals left) with visited per state. Shortcut: if k >= m + n - 2 the answer is m + n - 2."
+  ]
+ },
+ {
+  "order": 148,
+  "id": "lc-862",
+  "phase": 3,
+  "topic": "Prefix sums and deque",
+  "source": "leetcode",
+  "number": 862,
+  "title": "Shortest Subarray with Sum at Least K",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/shortest-subarray-with-sum-at-least-k/",
+  "blind": true,
+  "note": "",
+  "description": "Find the shortest non-empty subarray with sum at least k; values can be negative.",
+  "hints": [
+   "Negatives break a plain sliding window. Think in terms of P[j] - P[i] >= k.",
+   "A deque of prefix indices with increasing sums: pop the front while P[j] - P[front] >= k (record the length); pop the back while P[back] >= P[j]. Use long."
+  ]
+ },
+ {
+  "order": 149,
+  "id": "lc-1368",
+  "phase": 3,
+  "topic": "Graphs",
+  "source": "leetcode",
+  "number": 1368,
+  "title": "Minimum Cost to Make at Least One Valid Path in a Grid",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/",
+  "blind": true,
+  "note": "",
+  "description": "Each cell has an arrow, and changing one costs 1. Find the minimum cost to make a path from the top-left to the bottom-right.",
+  "hints": [
+   "Following the arrow costs 0; any other move costs 1.",
+   "0-1 BFS with a deque: 0-cost moves to the front, 1-cost moves to the back (or Dijkstra)."
+  ]
+ },
+ {
+  "order": 150,
+  "id": "lc-332",
+  "phase": 3,
+  "topic": "Graphs",
+  "source": "leetcode",
+  "number": 332,
+  "title": "Reconstruct Itinerary",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/reconstruct-itinerary/",
+  "blind": true,
+  "note": "",
+  "description": "Use every airline ticket exactly once to build the lexicographically smallest itinerary starting at JFK.",
+  "hints": [
+   "Using every edge exactly once is a well-known problem with a name.",
+   "Hierholzer's algorithm: adjacency lists as min-heaps; DFS consuming edges, add each airport post-order, then reverse."
+  ]
+ },
+ {
+  "order": 151,
+  "id": "lc-1857",
+  "phase": 3,
+  "topic": "Graphs",
+  "source": "leetcode",
+  "number": 1857,
+  "title": "Largest Color Value in a Directed Graph",
+  "difficulty": "hard",
+  "url": "https://leetcode.com/problems/largest-color-value-in-a-directed-graph/",
+  "blind": true,
+  "note": "",
+  "description": "A path's color value is how often its most common color appears. Return the largest over all paths, or -1 if the graph has a cycle.",
+  "hints": [
+   "Handle cycles first; on a DAG you can push information along edges in order.",
+   "Kahn's topological sort with dp[node][26] = the best count of each color on paths ending at node; if not every node is processed, return -1."
+  ]
+ }
+]
