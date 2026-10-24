@@ -144,3 +144,21 @@ func TestMedian(t *testing.T) {
 		t.Error("median is wrong")
 	}
 }
+
+func TestURLKey(t *testing.T) {
+	cases := map[string]string{
+		"https://leetcode.com/problems/Two-Sum/description/?envType=x": "leetcode:two-sum",
+		"leetcode.com/problems/two-sum":                                "leetcode:two-sum",
+		"https://www.leetcode.com/problems/two-sum/":                   "leetcode:two-sum",
+		"https://cses.fi/problemset/task/1158/":                        "cses:1158",
+		"https://cses.fi/problemset/result/1158":                       "https://cses.fi/problemset/result/1158",
+		"  HTTPS://Example.com/x/  ":                                   "https://example.com/x",
+		"":                                                             "",
+		"https://leetcode.com/problems/":                                "https://leetcode.com/problems",
+	}
+	for in, want := range cases {
+		if got := URLKey(in); got != want {
+			t.Errorf("URLKey(%q) = %q, want %q", in, got, want)
+		}
+	}
+}

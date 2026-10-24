@@ -6,6 +6,7 @@ package game
 import (
 	"math/rand/v2"
 	"sort"
+	"strings"
 	"time"
 )
 
@@ -187,4 +188,27 @@ func Median(vals []float64) float64 {
 		return s[n/2]
 	}
 	return (s[n/2-1] + s[n/2]) / 2
+}
+
+// URLKey turns a problem link into a stable key, so the same problem matches
+// however the link was copied: leetcode:<slug>, cses:<task number>, or the
+// trimmed lower-cased link for anything else.
+func URLKey(raw string) string {
+	u := strings.ToLower(strings.TrimSpace(raw))
+	if u == "" {
+		return ""
+	}
+	if i := strings.Index(u, "leetcode.com/problems/"); i >= 0 {
+		parts := strings.FieldsFunc(u[i+len("leetcode.com/problems/"):], func(r rune) bool { return r == '/' || r == '?' || r == '#' })
+		if len(parts) > 0 {
+			return "leetcode:" + parts[0]
+		}
+	}
+	if i := strings.Index(u, "cses.fi/problemset/task/"); i >= 0 {
+		n := strings.FieldsFunc(u[i+len("cses.fi/problemset/task/"):], func(r rune) bool { return r < '0' || r > '9' })
+		if len(n) > 0 {
+			return "cses:" + n[0]
+		}
+	}
+	return strings.TrimRight(u, "/")
 }
