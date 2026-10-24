@@ -93,7 +93,22 @@ For each active problem:
 
 I write a description (1–2 lines) and 2 hints for each of the 151 problems. Hint 1 points at how to think about it (the state, what to track, what's being searched); hint 2 names the key idea. For blind problems hint 1 avoids naming the pattern, since diagnosing the pattern is the point.
 
+### Revision calendar (added 24 Oct)
+
+Krishna's ask: when he solves a problem and feels he should solve it again in a week, he should see it on a calendar, for spaced revision.
+
+- **Scheduling.** After finishing any problem attempt (solved or stuck, timer or manual log), the result step offers "Revise in: 3 days · 1 week · 2 weeks · pick a date", skippable. A problem row in the List tab also has "Schedule revision". Works for problems not on the list too (keyed by the attempt's url/title).
+- **Data.** New table `revisions(id, problem_id NULL, url, title, difficulty, due DATE, created_at, done_at NULL)`. `due` is an app day (4 AM IST boundary), computed in Go.
+- **Due revisions surface first.** On the Solve tab, revisions due today or overdue appear above Next up as "Revise" cards with Start (prefilled link and difficulty). Home shows "N revisions due today".
+- **Completing one.** Finishing any attempt on the same `url_key` after the revision was scheduled marks its open revision done, even if that's earlier than the due day (doing it early still counts as revising). Then the result step offers to schedule the next one, so 3 days → 1 week → 2 weeks chains naturally. Revising earns the normal points for that attempt; no new rules.
+- **Calendar view.** In the List tab, above the problems: a month grid (Mon–Sun, matching the good-week board) with a count on each day that has revisions, today highlighted, overdue marked. Tap a day to list its revisions; each can be started, moved to another date, or removed.
+
 ## Calls I made (Claude's, not Krishna's)
+
+- The revision calendar lives in the List tab rather than a sixth tab.
+- Solving a scheduled problem early completes its revision.
+- A revision needs a `url_key` match to complete; a revision with no link is completed by tapping Done on it in the calendar.
+- Revision offers come after every finished attempt, including stuck ones (re-trying a stuck problem in a few days is the best use of it).
 
 - Being stuck moves the problem to the redo list instead of keeping it as Next up.
 - The seed updates content on existing rows (the handoff suggested insert-only); progress is safe because it's stored elsewhere.

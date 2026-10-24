@@ -154,7 +154,7 @@ func TestURLKey(t *testing.T) {
 		"https://cses.fi/problemset/result/1158":                       "https://cses.fi/problemset/result/1158",
 		"  HTTPS://Example.com/x/  ":                                   "https://example.com/x",
 		"":                                                             "",
-		"https://leetcode.com/problems/":                                "https://leetcode.com/problems",
+		"https://leetcode.com/problems/":                               "https://leetcode.com/problems",
 	}
 	for in, want := range cases {
 		if got := URLKey(in); got != want {
