@@ -1,30 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
-  api, ApiError, MYSTERY_COST, reasonLabel,
+  api, ApiError, MYSTERY_COST,
   type Attempt, type Difficulty, type Milestone, type Outcome, type Redemption,
-  type Result, type Reward, type Summary, type WeekStat,
+  type Reward, type StartBody, type Summary, type WeekStat,
 } from './api'
+import { DueRevisions, ListScreen, NextUp, ProblemBody, RevisePrompt, type ReviseTarget } from './problems'
+import { cap, DifficultyPicker, errText, resultToast, type Toast } from './ui'
 
-type Tab = 'home' | 'solve' | 'shop' | 'history'
-type Toast = { title: string; lines?: string[] } | null
+type Tab = 'home' | 'solve' | 'list' | 'shop' | 'history'
+const TABS: Tab[] = ['home', 'solve', 'list', 'shop', 'history']
 
 const DAY_LETTERS = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
-const DIFFICULTIES: Difficulty[] = ['easy', 'medium', 'hard']
-
-function cap(s: string) {
-  return s.charAt(0).toUpperCase() + s.slice(1)
-}
-
-function errText(e: unknown) {
-  return e instanceof Error ? e.message : 'Something went wrong'
-}
-
-function resultToast(r: Result): Toast {
-  return {
-    title: `+${r.earned} points`,
-    lines: r.awards.map(a => `${reasonLabel(a.reason)}  +${a.points}`),
-  }
-}
 
 export default function App() {
   const [auth, setAuth] = useState<'checking' | 'out' | 'in'>('checking')
@@ -48,6 +34,12 @@ export default function App() {
       else showToast({ title: errText(e) })
     }
   }, [showToast])
+
+  const startProblem = useCallback(async (b: StartBody) => {
+    await api.start(b)
+    await refresh()
+    setTab('solve')
+  }, [refresh])
 
   useEffect(() => {
     api.me()
@@ -91,6 +83,7 @@ export default function App() {
           <>
             {tab === 'home' && <Home s={summary} go={setTab} refresh={refresh} toast={showToast} />}
             {tab === 'solve' && <Solve s={summary} refresh={refresh} toast={showToast} />}
+            {tab === 'list' && <ListScreen startProblem={startProblem} toast={showToast} />}
             {tab === 'shop' && <Shop s={summary} refresh={refresh} toast={showToast} />}
             {tab === 'history' && <History />}
           </>
@@ -103,7 +96,7 @@ export default function App() {
         </div>
       )}
       <nav className="tabbar" aria-label="Sections">
-        {(['home', 'solve', 'shop', 'history'] as Tab[]).map(t => (
+        {TABS.map(t => (
           <button key={t} className={tab === t ? 'tab on' : 'tab'} onClick={() => setTab(t)} aria-current={tab === t ? 'page' : undefined}>
             {t === 'solve' && summary?.running ? <span className="dot" aria-label="timer running" /> : null}
             {cap(t)}
@@ -179,6 +172,15 @@ function Home({ s, go, refresh, toast }: ScreenProps & { go: (t: Tab) => void })
           <span>Timer running</span>
           <strong>{s.running.title || cap(s.running.difficulty)}</strong>
           <Elapsed since={s.running.startedAt} />
+        </button>
+      )}
+
+      {!s.running && (s.nextUp || s.revisionsDue.length > 0) && (
+        <button className="upnext" onClick={() => go('solve')}>
+          {s.revisionsDue.length > 0 && (
+            <span className="small"><strong>{s.revisionsDue.length} revision{s.revisionsDue.length > 1 ? 's' : ''} due</strong></span>
+          )}
+          {s.nextUp && <span><span className="muted small">Next up</span> {s.nextUp.title}</span>}
         </button>
       )}
 
@@ -279,26 +281,16 @@ function Elapsed({ since, big }: { since: string; big?: boolean }) {
 
 // ---------------------------------------------------------------- solve
 
-function DifficultyPicker({ value, onChange }: { value: Difficulty; onChange: (d: Difficulty) => void }) {
-  return (
-    <div className="seg" role="radiogroup" aria-label="Difficulty">
-      {DIFFICULTIES.map(d => (
-        <button key={d} type="button" role="radio" aria-checked={value === d} className={value === d ? `on ${d}` : d} onClick={() => onChange(d)}>
-          {cap(d)}
-        </button>
-      ))}
-    </div>
-  )
-}
-
 function Solve({ s, refresh, toast }: ScreenProps) {
   const [url, setUrl] = useState('')
   const [difficulty, setDifficulty] = useState<Difficulty>('medium')
   const [busy, setBusy] = useState(false)
+  const [other, setOther] = useState(false)
   const [manual, setManual] = useState(false)
   const [minutes, setMinutes] = useState('')
   const [outcome, setOutcome] = useState<Outcome>('solved')
   const [daysAgo, setDaysAgo] = useState(0)
+  const [after, setAfter] = useState<ReviseTarget | null>(null)
   const run = s.running
 
   const act = async (fn: () => Promise<void>) => {
@@ -312,26 +304,37 @@ function Solve({ s, refresh, toast }: ScreenProps) {
     }
   }
 
+  const start = (b: StartBody) => act(async () => {
+    await api.start(b)
+    setAfter(null)
+    await refresh()
+  })
+
   if (run) {
+    const rp = s.runningProblem
+    // What to offer a revision for once this attempt is finished.
+    const target: ReviseTarget | null = rp
+      ? { problemId: rp.id, url: rp.url, title: rp.title, difficulty: rp.difficulty }
+      : run.url ? { url: run.url, title: run.title || run.url, difficulty: run.difficulty as Difficulty } : null
+    const finish = (o: Outcome) => act(async () => {
+      toast(resultToast(await api.finish(run.id, o)))
+      setAfter(target)
+      await refresh()
+    })
     return (
       <div className="stack-lg">
         <section className="timer">
-          <p className="muted small">{cap(run.difficulty)}</p>
+          <p className="muted small">{cap(run.difficulty)}{rp?.topic ? ` · ${rp.topic}` : ''}</p>
           <h2 className="problem-title">
             {run.url ? <a href={run.url} target="_blank" rel="noreferrer">{run.title || run.url}</a> : (run.title || 'Untitled problem')}
           </h2>
           <Elapsed since={run.startedAt} big />
           {run.difficulty === 'medium' && <p className="muted small">Solve a medium in under 25:00 for +10.</p>}
         </section>
+        {rp && <ProblemBody p={rp} />}
         <div className="actions">
-          <button className="btn primary" disabled={busy} onClick={() => act(async () => {
-            toast(resultToast(await api.finish(run.id, 'solved')))
-            await refresh()
-          })}>Solved</button>
-          <button className="btn" disabled={busy} onClick={() => act(async () => {
-            toast(resultToast(await api.finish(run.id, 'stuck')))
-            await refresh()
-          })}>Stuck, log the attempt</button>
+          <button className="btn primary" disabled={busy} onClick={() => finish('solved')}>Solved</button>
+          <button className="btn" disabled={busy} onClick={() => finish('stuck')}>Stuck, log the attempt</button>
           <button className="link danger" disabled={busy} onClick={() => act(async () => {
             if (!confirm('Discard this timer? Nothing will be logged.')) return
             await api.discard(run.id)
@@ -343,27 +346,36 @@ function Solve({ s, refresh, toast }: ScreenProps) {
     )
   }
 
+  if (after) return <RevisePrompt target={after} done={() => setAfter(null)} toast={toast} />
+
   return (
     <div className="stack-lg">
-      <form
-        className="stack"
-        onSubmit={e => {
-          e.preventDefault()
-          void act(async () => {
-            await api.start(url, difficulty)
-            setUrl('')
-            await refresh()
-          })
-        }}
-      >
-        <h2 className="section-title">Start a problem</h2>
-        <label className="field">
-          <span>Problem link (optional)</span>
-          <input type="url" inputMode="url" placeholder="https://leetcode.com/problems/…" value={url} onChange={e => setUrl(e.target.value)} />
-        </label>
-        <DifficultyPicker value={difficulty} onChange={setDifficulty} />
-        <button className="btn primary" disabled={busy}>Start timer</button>
-      </form>
+      {s.revisionsDue.length > 0 && <DueRevisions revs={s.revisionsDue} busy={busy} onStart={start} />}
+
+      <NextUp next={s.nextUp} busy={busy} onStart={start} refresh={refresh} toast={toast} />
+
+      <section className="stack">
+        <button className="link" aria-expanded={other} onClick={() => setOther(o => !o)}>
+          {other ? 'Hide' : 'Solving something else? Paste a link'}
+        </button>
+        {other && (
+          <form
+            className="stack panel"
+            onSubmit={e => {
+              e.preventDefault()
+              void start({ url, difficulty })
+              setUrl('')
+            }}
+          >
+            <label className="field">
+              <span>Problem link (optional)</span>
+              <input type="url" inputMode="url" placeholder="https://leetcode.com/problems/…" value={url} onChange={e => setUrl(e.target.value)} />
+            </label>
+            <DifficultyPicker value={difficulty} onChange={setDifficulty} />
+            <button className="btn primary" disabled={busy}>Start timer</button>
+          </form>
+        )}
+      </section>
 
       <section className="stack">
         <button className="link" aria-expanded={manual} onClick={() => setManual(m => !m)}>
@@ -381,13 +393,18 @@ function Solve({ s, refresh, toast }: ScreenProps) {
               }
               void act(async () => {
                 toast(resultToast(await api.log({ url, difficulty, outcome, minutes: mins, daysAgo })))
+                if (url.trim()) setAfter({ url: url.trim(), title: url.trim(), difficulty })
                 setMinutes('')
                 setUrl('')
                 await refresh()
               })
             }}
           >
-            <p className="muted small">Uses the link and difficulty above.</p>
+            <label className="field">
+              <span>Problem link (optional)</span>
+              <input type="url" inputMode="url" placeholder="https://leetcode.com/problems/…" value={url} onChange={e => setUrl(e.target.value)} />
+            </label>
+            <DifficultyPicker value={difficulty} onChange={setDifficulty} />
             <label className="field">
               <span>Minutes it took</span>
               <input type="number" inputMode="numeric" min={1} max={600} value={minutes} onChange={e => setMinutes(e.target.value)} />

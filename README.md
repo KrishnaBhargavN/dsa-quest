@@ -36,6 +36,12 @@ Functions run in Singapore (`sin1`, set in `vercel.json`) next to the database. 
 
 A day runs 4 AM to 4 AM IST. Big rewards unlock at 3 and 6 good weeks, counted in total, not in a row. All numbers live in `internal/game/game.go`; shop prices and the mystery-box pool are edited in the app (Shop → Edit rewards and prices).
 
+## Problem list and revisions
+
+The Solve tab shows **Next up**: the first unfinished problem of a 151-problem plan (Oct 26 – Dec 20), with a description, two hints and a link. The list lives in `internal/store/problems.json` and is re-applied on every cold start: edit the file to fix wording or add problems, and progress is kept because it's stored in attempts, not in the list. A problem counts as done once any attempt on its link finishes (links are matched however they were copied), or when marked "Done before" (no points). Getting stuck moves it to the redo list, as does a medium that took over 40 minutes.
+
+After finishing a problem you can schedule a revision; due revisions show at the top of the Solve tab and on the calendar in the List tab. Your own problems are added at the bottom of the List tab.
+
 ## Environment
 
 | Variable | Needed | What |

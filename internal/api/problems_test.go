@@ -103,7 +103,7 @@ func TestNextUpStatusAndRedo(t *testing.T) {
 	// A link pasted by hand, however it was copied, ticks off the list item.
 	// A medium over 40 minutes goes on the redo list; a fast re-solve clears it.
 	if code := c.do("POST", "/api/attempts/log", map[string]any{
-		"url": "https://leetcode.com/problems/Longest-Increasing-Subsequence/description/?envType=study-plan",
+		"url":        "https://leetcode.com/problems/Longest-Increasing-Subsequence/description/?envType=study-plan",
 		"difficulty": "medium", "outcome": "solved", "minutes": 45, "daysAgo": 0,
 	}, nil); code != 201 {
 		t.Fatalf("manual log = %d", code)
