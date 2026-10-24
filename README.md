@@ -16,7 +16,7 @@ One Go binary serves the API under `/api` and the React app for everything else.
    git push -u origin main
    ```
 2. **Vercel → Add New → Project →** import `dsa-quest`. Before clicking Deploy, open **Environment Variables** and add `APP_PASSWORD` with the password you'll log in with (not one you use anywhere else). Deploy.
-3. **Project → Storage → Create Database → Neon.** Pick region **Singapore**, the **Free** plan, create it, then **Connect** it to this project for all environments. This sets `DATABASE_URL` for you.
+3. **Project → Storage → Create Database → Neon.** Pick region **Singapore**, the **Free** plan, create it, then **Connect** it to this project for **Production only**, so preview builds never write real points. This sets `DATABASE_URL` (pooled) and `DATABASE_URL_UNPOOLED` (direct) for you.
 4. **Deployments →** the latest one **→ ⋯ → Redeploy**, so the new database variable is picked up.
 5. **Settings → Domains →** add `dsa.bhargavnkrishna.site`. In Cloudflare DNS add the CNAME Vercel shows (name `dsa`), proxy status **DNS only** (grey cloud). Wait for the certificate.
 
