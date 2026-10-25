@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"dsaquest/internal/api"
+	"dsaquest/internal/lessons"
 	"dsaquest/internal/store"
 )
 
@@ -34,6 +35,10 @@ func main() {
 		log.Print("warning: DATABASE_URL is not set; the API will answer 503 until it is")
 	} else if st, err = store.Open(dsn); err != nil {
 		log.Fatal(err)
+	}
+
+	if err := lessons.Err(); err != nil {
+		log.Printf("warning: theory lessons failed to load: %v", err)
 	}
 
 	password := os.Getenv("APP_PASSWORD")

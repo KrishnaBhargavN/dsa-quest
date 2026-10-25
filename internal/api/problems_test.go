@@ -300,3 +300,41 @@ func TestRevisions(t *testing.T) {
 		t.Errorf("delete = %d", code)
 	}
 }
+
+func TestLessonsAndLinks(t *testing.T) {
+	c, now, _ := setup(t)
+	if code := c.do("GET", "/api/lessons", nil, nil); code != 401 {
+		t.Errorf("lessons without login = %d, want 401", code)
+	}
+	login(t, c)
+
+	var index []struct {
+		ID    string `json:"id"`
+		Title string `json:"title"`
+	}
+	if code := c.do("GET", "/api/lessons", nil, &index); code != 200 || len(index) < 30 {
+		t.Fatalf("lesson index = %d with %d lessons", code, len(index))
+	}
+	var lesson struct {
+		Title string `json:"title"`
+		Body  string `json:"body"`
+	}
+	if code := c.do("GET", "/api/lessons/sliding-window", nil, &lesson); code != 200 || lesson.Body == "" {
+		t.Errorf("sliding window lesson = %d", code)
+	}
+	if code := c.do("GET", "/api/lessons/nope", nil, nil); code != 404 {
+		t.Errorf("missing lesson = %d, want 404", code)
+	}
+
+	l := problemList(t, c)
+	if p := find(l, "lc-1462"); p.LessonID != "graph-traversal" || !p.FirstOfTopic {
+		t.Errorf("first graph problem: lesson %q first %v", p.LessonID, p.FirstOfTopic)
+	}
+	if p := find(l, "lc-994"); p.LessonID != "" {
+		t.Errorf("unfinished blind problem leaks lesson %q", p.LessonID)
+	}
+	solve(t, c, now, "lc-1462", "solved", 10)
+	if p := find(problemList(t, c), "lc-827"); p.FirstOfTopic {
+		t.Error("second graph problem should not be first of topic")
+	}
+}

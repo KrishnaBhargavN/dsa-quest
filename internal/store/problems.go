@@ -13,6 +13,7 @@ import (
 	"github.com/lib/pq"
 
 	"dsaquest/internal/game"
+	"dsaquest/internal/lessons"
 )
 
 //go:embed problems.json
@@ -45,7 +46,12 @@ type Problem struct {
 	Status      string   `json:"status"`
 	Redo        bool     `json:"redo"`
 	RevisionDue *string  `json:"revisionDue"`
-	urlKey      string
+	// LessonID is the theory lesson for this problem's topic; empty while a
+	// blind problem is unfinished, so it can't give the topic away.
+	LessonID string `json:"lessonId"`
+	// FirstOfTopic is true when no problem with this topic is finished yet.
+	FirstOfTopic bool `json:"firstOfTopic"`
+	urlKey       string
 }
 
 type ProblemList struct {
@@ -240,6 +246,7 @@ func loadProblems(ctx context.Context, q queryer) (*ProblemList, error) {
 		return nil, err
 	}
 
+	topicStarted := map[string]bool{}
 	for i := range list.Problems {
 		p := &list.Problems[i]
 		st := stats[p.urlKey]
@@ -259,9 +266,13 @@ func loadProblems(ctx context.Context, q queryer) (*ProblemList, error) {
 		if d, ok := due[p.urlKey]; ok {
 			p.RevisionDue = &d
 		}
+		if p.Status != StatusTodo && p.Topic != "" {
+			topicStarted[p.Topic] = true
+		}
 		if p.Blind && p.Status == StatusTodo {
 			p.Topic = ""
 		}
+		p.LessonID = lessons.ForTopic(p.Topic)
 		if p.Status == StatusTodo {
 			if list.NextID == "" {
 				list.NextID = p.ID
@@ -269,6 +280,10 @@ func loadProblems(ctx context.Context, q queryer) (*ProblemList, error) {
 		} else {
 			list.Done++
 		}
+	}
+	for i := range list.Problems {
+		p := &list.Problems[i]
+		p.FirstOfTopic = p.Topic != "" && !topicStarted[p.Topic]
 	}
 	list.Total = len(list.Problems)
 	return list, nil

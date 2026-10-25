@@ -64,6 +64,8 @@ func (s *Server) Handler() http.Handler {
 	api.HandleFunc("PUT /api/revisions/{id}", s.authed(s.moveRevision))
 	api.HandleFunc("POST /api/revisions/{id}/done", s.authed(s.completeRevision))
 	api.HandleFunc("DELETE /api/revisions/{id}", s.authed(s.deleteRevision))
+	api.HandleFunc("GET /api/lessons", s.authed(s.lessonIndex))
+	api.HandleFunc("GET /api/lessons/{id}", s.authed(s.lesson))
 	api.HandleFunc("/api/", func(w http.ResponseWriter, r *http.Request) {
 		writeErr(w, http.StatusNotFound, "no such endpoint")
 	})

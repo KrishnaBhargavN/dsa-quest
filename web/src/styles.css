@@ -593,3 +593,88 @@ h1, h2, p { margin: 0; }
 .cal-day.cleared .cal-count { background: var(--line); color: var(--ink); }
 
 .rev { display: grid; gap: 8px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+
+/* ---------- theory lessons ---------- */
+
+.lesson-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  background: var(--bg);
+  border: 1.5px solid var(--board-dark);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.lesson-link .small { font-weight: 400; white-space: nowrap; }
+
+.new-topic {
+  display: grid;
+  gap: 8px;
+  background: var(--brass-soft);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.lesson {
+  max-width: 680px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  padding: env(safe-area-inset-top) 0 calc(32px + env(safe-area-inset-bottom));
+}
+.lesson-bar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+.lesson-body { padding: 16px 20px 40px; }
+.lesson-title { font-size: 1.6rem; font-weight: 800; font-stretch: 115%; line-height: 1.15; }
+.lesson-summary { margin-top: 8px; color: var(--muted); font-size: 1.05rem; }
+
+.md { display: grid; gap: 12px; margin-top: 20px; line-height: 1.6; }
+.md-h3 { margin: 18px 0 0; font-size: 1.15rem; font-weight: 800; font-stretch: 110%; }
+.md-h4 { margin: 8px 0 0; font-size: 1rem; font-weight: 700; }
+.md-list { margin: 0; padding-left: 22px; display: grid; gap: 6px; }
+.md code {
+  font-family: ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
+  font-size: 0.88em;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 0 4px;
+  overflow-wrap: anywhere;
+}
+.md-code {
+  margin: 0;
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+  overflow-x: auto;
+  line-height: 1.45;
+  font-size: 0.85rem;
+}
+.md-code code { background: none; border: none; padding: 0; font-size: inherit; overflow-wrap: normal; }
+.md-details summary {
+  cursor: pointer;
+  font-weight: 700;
+  padding: 10px 12px;
+  border: 1.5px dashed var(--line);
+  border-radius: 10px;
+}
+.md-details[open] summary { margin-bottom: 8px; }
+.md-table-wrap { overflow-x: auto; }
+.md-table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+.md-table th, .md-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.md-table th { font-weight: 700; color: var(--muted); }

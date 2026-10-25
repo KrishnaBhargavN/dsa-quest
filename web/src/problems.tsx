@@ -3,6 +3,7 @@ import {
   api,
   type Difficulty, type Problem, type ProblemInput, type ProblemList, type Revision, type StartBody, type Status,
 } from './api'
+import { LessonLink, TheoryIndex } from './lessons'
 import { addDays, cap, DifficultyPicker, errText, fmtDay, isoDay, localToday, parseDay, type Toast } from './ui'
 
 type ToastFn = (t: Toast) => void
@@ -68,6 +69,7 @@ export function ProblemBody({ p }: { p: Problem }) {
       {p.description && <p>{p.description}</p>}
       {p.note && <p className="note">{p.note}</p>}
       <Hints key={p.id} hints={p.hints} />
+      {p.lessonId && <LessonLink id={p.lessonId} />}
     </div>
   )
 }
@@ -132,6 +134,12 @@ export function NextUp({ next, busy, onStart, refresh, toast }: {
   return (
     <section className="card stack" aria-label="Next problem">
       <p className="eyebrow">{picked ? 'Picked for now' : 'Next up'}</p>
+      {p.firstOfTopic && p.lessonId && (
+        <div className="new-topic">
+          <p className="small"><strong>New topic.</strong> Read the theory first so you can spend your time on the problem.</p>
+          <LessonLink id={p.lessonId} prefix="Read" />
+        </div>
+      )}
       <ProblemHead p={p} />
       <ProblemBody p={p} />
       <div className="actions">
@@ -262,6 +270,8 @@ export function ListScreen({ startProblem, toast }: { startProblem: (b: StartBod
 
   return (
     <div className="stack-lg">
+      <TheoryIndex />
+
       <Calendar version={version} startProblem={startProblem} changed={changed} toast={toast} />
 
       <section className="stack" aria-label="Progress">

@@ -2,9 +2,10 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   api, ApiError, MYSTERY_COST,
   type Attempt, type Difficulty, type Milestone, type Outcome, type Redemption,
-  type Reward, type StartBody, type Summary, type WeekStat,
+  type LessonMeta, type Reward, type StartBody, type Summary, type WeekStat,
 } from './api'
 import { DueRevisions, ListScreen, NextUp, ProblemBody, RevisePrompt, type ReviseTarget } from './problems'
+import { LessonsContext, LessonView } from './lessons'
 import { cap, DifficultyPicker, errText, resultToast, type Toast } from './ui'
 
 type Tab = 'home' | 'solve' | 'list' | 'shop' | 'history'
@@ -19,6 +20,19 @@ export default function App() {
   const [summary, setSummary] = useState<Summary | null>(null)
   const [toast, setToast] = useState<Toast>(null)
   const toastTimer = useRef<number | undefined>(undefined)
+  const [lessonIndex, setLessonIndex] = useState<LessonMeta[]>([])
+  const [lessonId, setLessonId] = useState<string | null>(null)
+
+  // Opening a lesson adds a history entry, so the phone's back button closes it.
+  const openLesson = useCallback((id: string) => {
+    history.pushState({ lesson: id }, '')
+    setLessonId(id)
+  }, [])
+  useEffect(() => {
+    const onPop = () => setLessonId(null)
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
+  }, [])
 
   const showToast = useCallback((t: Toast) => {
     window.clearTimeout(toastTimer.current)
@@ -51,7 +65,9 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    if (auth === 'in') void refresh()
+    if (auth !== 'in') return
+    void refresh()
+    api.lessons().then(setLessonIndex).catch(() => setLessonIndex([]))
   }, [auth, refresh])
 
   useEffect(() => {
@@ -73,7 +89,9 @@ export default function App() {
   if (auth === 'out') return <Login onIn={() => setAuth('in')} />
 
   return (
-    <div className="app">
+    <LessonsContext.Provider value={{ index: lessonIndex, open: openLesson }}>
+    {lessonId && <LessonView id={lessonId} close={() => history.back()} />}
+    <div className="app" hidden={lessonId !== null}>
       <header className="topbar">
         <span className="wordmark">DSA Quest</span>
         <button className="link" onClick={async () => { await api.logout(); setAuth('out') }}>Log out</button>
@@ -104,6 +122,7 @@ export default function App() {
         ))}
       </nav>
     </div>
+    </LessonsContext.Provider>
   )
 }
 

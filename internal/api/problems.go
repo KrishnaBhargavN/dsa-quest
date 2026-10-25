@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"dsaquest/internal/game"
+	"dsaquest/internal/lessons"
 	"dsaquest/internal/store"
 )
 
@@ -149,4 +150,17 @@ func (s *Server) deleteRevision(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	writeJSON(w, http.StatusOK, map[string]bool{"ok": true})
+}
+
+func (s *Server) lessonIndex(w http.ResponseWriter, r *http.Request) {
+	writeJSON(w, http.StatusOK, lessons.Index())
+}
+
+func (s *Server) lesson(w http.ResponseWriter, r *http.Request) {
+	l, ok := lessons.Get(r.PathValue("id"))
+	if !ok {
+		writeErr(w, http.StatusNotFound, "no such lesson")
+		return
+	}
+	writeJSON(w, http.StatusOK, l)
 }

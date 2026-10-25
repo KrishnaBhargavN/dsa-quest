@@ -60,7 +60,12 @@ export interface Problem {
   status: Status
   redo: boolean
   revisionDue: string | null
+  lessonId: string
+  firstOfTopic: boolean
 }
+
+export interface LessonMeta { id: string; title: string; group: string; order: number; topics: string[]; minutes: number; summary: string }
+export interface Lesson extends LessonMeta { body: string }
 
 export interface ProblemList { problems: Problem[]; nextId: string; done: number; total: number }
 
@@ -158,6 +163,8 @@ export const api = {
   scheduleRevision: (r: RevisionInput) => call<Revision>('POST', '/api/revisions', r),
   moveRevision: (id: number, due: string) => call<{ ok: boolean }>('PUT', `/api/revisions/${id}`, { due }),
   revisionDone: (id: number) => call<{ ok: boolean }>('POST', `/api/revisions/${id}/done`),
+  lessons: () => call<LessonMeta[]>('GET', '/api/lessons'),
+  lesson: (id: string) => call<Lesson>('GET', `/api/lessons/${id}`),
   deleteRevision: (id: number) => call<{ ok: boolean }>('DELETE', `/api/revisions/${id}`),
 }
 

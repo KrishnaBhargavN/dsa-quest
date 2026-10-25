@@ -122,3 +122,14 @@ Krishna's ask: when he solves a problem and feels he should solve it again in a 
 - Rule tests for `url_key` normalisation.
 - API tests: seed is idempotent and keeps progress; Next up skips solved, stuck and done-before; a pasted LeetCode link with `/description/` matches; blind topic hidden until finished; redo list rules; adding a problem at `next` makes it Next up; done before earns no points.
 - Check every screen at phone width in light and dark mode, as v1 was.
+
+### Theory lessons (added 25 Oct)
+
+Krishna's ask: a one-stop place, with the theory for every topic he'll need explained well enough (including *why* each algorithm works) that he never leaves the app to learn it. Cover all interview topics, including ones he already solved outside the list.
+
+- **One lesson per topic, about 35 in all**, as Markdown files embedded in the binary (`internal/lessons/*.md`, front matter: title, group, order, topics, minutes, summary). Loaded on demand via `GET /api/lessons` (index) and `GET /api/lessons/{id}`.
+- **Each lesson:** how to recognise it, the core idea, why it works (invariant / exchange argument / optimal substructure), a Java template (collapsed behind a tap), complexity, common bugs (including shared mutable state across calls), and where it shows up on the list.
+- **Linking:** each problem gets `lessonId` from its topic. Blind problems get none until finished. `firstOfTopic` is true when no problem with that topic is finished yet; the Next up card then suggests reading the lesson first.
+- **Where:** a lesson link on every problem card (including during the timer), and a Theory section in the List tab with every lesson grouped.
+- **Rendering:** a tiny in-house Markdown renderer (headings, paragraphs, lists, code, inline code, bold) that builds React elements, so no new dependency and no raw HTML.
+- **Calls (Claude's):** read-first is suggested, never forced; Java code blocks start collapsed so a cold attempt isn't spoiled.
